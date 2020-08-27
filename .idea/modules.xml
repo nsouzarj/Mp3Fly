@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Mp3Fly.iml" filepath="$PROJECT_DIR$/Mp3Fly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Mp3Fly.iml" filepath="$PROJECT_DIR$/.idea/Mp3Fly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Mp3Fly.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Mp3Fly.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mylibrary/Mp3Fly.mylibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/mylibrary/Mp3Fly.mylibrary.iml" />
     </modules>
   </component>
 </project>

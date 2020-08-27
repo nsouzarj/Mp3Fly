@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nelson.mp3fly"
+          xmlns:tools="http://schemas.android.com/tools" package="com.seixas.mp3fly"
     android:versionCode="8"
     android:versionName="1.8">
-    <permission android:name="com.example.nelson.mp3fly.permission.DEADLY_ACTIVITY"
+    <uses-sdk
 
-        android:permissionGroup="android.permission-group.STORAGE"
+            android:targetSdkVersion="29" />
+
+    <permission android:name="com.seixas.mp3fly.permission.DEADLY_ACTIVITY"
+
         android:label="Teste"
         android:protectionLevel="normal" />
-
-
-
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.EXTRA_STORAGE_VOLUME"/>
-    <uses-permission android:name="android.permission."/>
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+
 
 
     <application
@@ -24,13 +25,16 @@
         android:icon="@mipmap/mp3l2"
         android:label="@string/app_name"
         android:supportsRtl="true"
+
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Tocador"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            android:finishOnTaskLaunch="true"
-            android:multiprocess="false">
+                android:name=".Tocador"
+                android:configChanges="orientation|screenSize"
+                android:screenOrientation="portrait"
+                android:launchMode="singleTop"
+                android:finishOnTaskLaunch="true"
+                android:multiprocess="false" tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

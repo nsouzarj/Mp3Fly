@@ -1,16 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     signingConfigs {
     }
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+
+    compileSdkVersion 29
+    buildToolsVersion '28.0.3'
     defaultConfig {
-        applicationId 'com.nelson.mp3fly'
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 11
-        versionName '1.11'
+        applicationId 'com.seixas.mp3fly'
+        minSdkVersion  16
+        targetSdkVersion 29
+
     }
     buildTypes {
         release {
@@ -30,13 +32,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
 
 repositories {
     google()
+    mavenCentral()
 }
 buildscript {
     repositories {
