@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="All Places" />
+  </component>
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1641a026-b087-4c6b-8265-a7476a667dde" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/externalDependencies.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/seixas/mp3fly/Teste.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_animated_vector_drawable_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_animated_vector_drawable_23_2_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_appcompat_v7_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_appcompat_v7_23_2_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_annotations_23_2_1_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_annotations_23_2_1_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_v4_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_v4_23_2_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_vector_drawable_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_vector_drawable_23_2_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/junit_junit_4_12_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/junit_junit_4_12_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/org_hamcrest_hamcrest_core_1_3_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/org_hamcrest_hamcrest_core_1_3_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/runConfigurations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/runConfigurations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app-release.apk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/release/app-release.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/app-release.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/output.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/nelson/mp3fly/Tocador.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/nelson/mp3fly/Tocamedia.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_tocador.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_tocador.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/mp3l2.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/mp3l2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-w820dp/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-w820dp/dimens.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="PARALLEL_COMPILATION" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="EXPORT_PRIVATE_KEY" value="false" />
+    <option name="KEY_STORE_PATH" value="$PROJECT_DIR$/../chaves/mp3fly.jks" />
+    <option name="KEY_ALIAS" value="umpload" />
+    <option name="REMEMBER_PASSWORDS" value="true" />
+    <option name="BUILD_TARGET_KEY" value="apk" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GroovyConsoleState">
+    <option name="list">
+      <list>
+        <Entry>
+          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
+        </Entry>
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1aqBGkdjc0VZIoxJwZiVJjpThBu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/app/release/app-release.apk" />
+    <property name="ApkExportedModule" value="app" />
+    <property name="BundleExportedModule" value="app" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Galaxy_Nexus_API_28" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-05-03T22:20:10.376181Z" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="ExportApk.ApkPath" value="$PROJECT_DIR$/app" />
+    <property name="ExportApk.BuildVariants" value="release" />
+    <property name="ExportApk.SignV1" value="true" />
+    <property name="ExportApk.SignV2" value="true" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SelectDeploymentTargetsDialog.selectedDevices" value="192.168.56.101:5555" />
+    <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/.jdks/openjdk-14.0.2" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.2839161" />
+    <property name="project.structure.side.proportion" value="0.43683589" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+    <property name="show.unlinked.gradle.project.popup" value="true" />
+  </component>
+  <component name="PsdUISettings">
+    <option name="LAST_EDITED_BUILD_TYPE" value="release" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle --build-file" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Android App.Mp3">
+    <configuration name="Mp3" type="AndroidRunConfigurationType" factoryName="Android App">
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="do_nothing" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="false" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java />
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="/home/nelson/backupnovo/Mp3Fly/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/build.gradle" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="/home/nelson/backupnovo/Mp3Fly/mylibrary/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/mylibrary/build.gradle" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy" singleton="false">
+      <module name="Mp3Fly" />
+      <setting name="path" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="file://$PROJECT_DIR$" />
+      <setting name="debug" value="false" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in Mp3Fly" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="Mp3Fly" />
+      <useClassPathOnly />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app in Mp3Fly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Mp3Fly" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="app.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="app" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.app in Mp3Fly" />
+        <item itemvalue="Gradle./home/nelson/backupnovo/Mp3Fly/build.gradle" />
+        <item itemvalue="JUnit.All in Mp3Fly" />
+        <item itemvalue="Gradle./home/nelson/backupnovo/Mp3Fly/mylibrary/build.gradle" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1641a026-b087-4c6b-8265-a7476a667dde" name="Default Changelist" comment="" />
+      <created>1587453150124</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587453150124</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="455" y="760" width="1000" height="885" key="#Plugins" timestamp="1596152374275">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="455" y="760" width="1000" height="885" key="#Plugins/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596152374275" />
+    <state x="139" y="690" width="1641" height="1026" key="#Project_Structure" timestamp="1596155031652">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="139" y="690" width="1641" height="1026" key="#Project_Structure/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155031652" />
+    <state x="417" y="814" width="1347" height="902" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596154726903">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="417" y="814" width="1347" height="902" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154726903" />
+    <state x="1783" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588544452752" />
+    <state x="622" y="927" width="655" height="554" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1596153886648">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="622" y="927" width="655" height="554" key="#com.intellij.ide.util.PackageChooserDialog/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596153886648" />
+    <state x="592" y="1120" width="460" height="330" key="#com.intellij.tools.ToolEditorDialog" timestamp="1588541752246">
+      <screen x="0" y="906" width="1366" height="768" />
+    </state>
+    <state x="592" y="1120" width="460" height="330" key="#com.intellij.tools.ToolEditorDialog/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541752246" />
+    <state x="704" y="1065" width="890" height="381" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1596154761140">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="704" y="1065" width="890" height="381" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154761140" />
+    <state x="2070" y="375" width="563" height="322" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588544313368" />
+    <state x="1656" y="397" width="894" height="601" key="AVDManager" timestamp="1588542737470">
+      <screen x="1366" y="0" width="1920" height="1080" />
+    </state>
+    <state x="282" y="945" width="894" height="601" key="AVDManager/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541114152" />
+    <state x="1656" y="397" width="894" height="601" key="AVDManager/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588542737470" />
+    <state x="1908" y="296" width="826" height="481" key="AndroidCreateResourceDirectoryDialog" timestamp="1588376535673">
+      <screen x="1366" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1908" y="296" width="826" height="481" key="AndroidCreateResourceDirectoryDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588376535673" />
+    <state x="1903" y="293" width="826" height="481" key="AndroidCreateResourceFileDialog" timestamp="1588377914263">
+      <screen x="1366" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1903" y="293" width="826" height="481" key="AndroidCreateResourceFileDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588377914263" />
+    <state x="2183" y="305" width="276" height="463" key="AndroidProcessChooserDialog" timestamp="1588392782733">
+      <screen x="1366" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2183" y="305" width="276" height="463" key="AndroidProcessChooserDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588392782733" />
+    <state x="737" y="983" width="1013" height="483" key="FileChooserDialogImpl" timestamp="1596154896462">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="524" y="1288" width="308" height="343" key="FileChooserDialogImpl/0.1080.1366.768/1366.0.1920.1080@0.1080.1366.768" timestamp="1588875616107" />
+    <state x="737" y="983" width="1013" height="483" key="FileChooserDialogImpl/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154896462" />
+    <state x="524" y="1114" width="426" height="481" key="FileChooserDialogImpl/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541980061" />
+    <state x="2103" y="293" width="788" height="508" key="FileChooserDialogImpl/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588542215983" />
+    <state width="1858" height="252" key="GridCell.Tab.0.bottom" timestamp="1596155050390">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state width="1876" height="2" key="GridCell.Tab.0.bottom/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902158" />
+    <state width="1858" height="252" key="GridCell.Tab.0.bottom/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050390" />
+    <state width="938" height="631" key="GridCell.Tab.0.bottom/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
+    <state width="938" height="304" key="GridCell.Tab.0.bottom/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785705" />
+    <state width="1858" height="252" key="GridCell.Tab.0.center" timestamp="1596155050389">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state width="1876" height="2" key="GridCell.Tab.0.center/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902157" />
+    <state width="1858" height="252" key="GridCell.Tab.0.center/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050389" />
+    <state width="938" height="631" key="GridCell.Tab.0.center/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
+    <state width="938" height="304" key="GridCell.Tab.0.center/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785705" />
+    <state width="1858" height="252" key="GridCell.Tab.0.left" timestamp="1596155050389">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state width="1876" height="2" key="GridCell.Tab.0.left/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902157" />
+    <state width="1858" height="252" key="GridCell.Tab.0.left/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050389" />
+    <state width="938" height="631" key="GridCell.Tab.0.left/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
+    <state width="938" height="304" key="GridCell.Tab.0.left/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785704" />
+    <state width="1858" height="252" key="GridCell.Tab.0.right" timestamp="1596155050390">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state width="1876" height="2" key="GridCell.Tab.0.right/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902157" />
+    <state width="1858" height="252" key="GridCell.Tab.0.right/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050390" />
+    <state width="938" height="631" key="GridCell.Tab.0.right/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
+    <state width="938" height="304" key="GridCell.Tab.0.right/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785705" />
+    <state x="1908" y="284" width="706" height="505" key="IDE.errors.dialog" timestamp="1588545042229">
+      <screen x="1366" y="0" width="1920" height="1080" />
+    </state>
+    <state x="386" y="1108" width="706" height="505" key="IDE.errors.dialog/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588537270576" />
+    <state x="1908" y="284" width="826" height="505" key="IDE.errors.dialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545042229" />
+    <state x="289" y="690" width="1631" height="1026" key="SettingsEditor" timestamp="1596154965072">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="314" y="38" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1596149264213" />
+    <state x="289" y="690" width="1631" height="1026" key="SettingsEditor/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154965072" />
+    <state x="314" y="906" width="1026" height="763" key="SettingsEditor/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588542020676" />
+    <state x="1808" y="115" width="1026" height="842" key="SettingsEditor/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545307923" />
+    <state x="684" y="1073" width="947" height="262" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1596150575866">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="684" y="1073" width="947" height="262" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596150575866" />
+    <state x="663" y="1097" width="593" height="212" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596152483423">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="663" y="1097" width="593" height="212" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596152483423" />
+    <state x="624" y="938" width="840" height="1034" key="run.anything.popup" timestamp="1596152148671">
+      <screen x="0" y="690" width="1920" height="1080" />
+    </state>
+    <state x="624" y="938" width="840" height="1034" key="run.anything.popup/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596152148671" />
+    <state x="1990" y="248" key="run.anything.popup/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588544055149" />
+    <state x="1989" y="238" key="search.everywhere.popup" timestamp="1588381295985">
+      <screen x="1366" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1989" y="238" key="search.everywhere.popup/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588381295985" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Mp3Fly$app_in_Mp3Fly.ic" NAME="app in Mp3Fly Coverage Results" MODIFIED="1596154795078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>app.*</FILTER>
+    </SUITE>
+  </component>
+</project>

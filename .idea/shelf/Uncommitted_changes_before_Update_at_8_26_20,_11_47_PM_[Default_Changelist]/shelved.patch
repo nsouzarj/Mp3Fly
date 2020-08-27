@@ -1,0 +1,2794 @@
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\nandroid {\r\n    signingConfigs {\r\n    }\r\n    compileSdkVersion 26\r\n    buildToolsVersion '27.0.3'\r\n    defaultConfig {\r\n        applicationId 'com.nelson.mp3fly'\r\n        minSdkVersion 16\r\n        targetSdkVersion 23\r\n        versionCode 11\r\n        versionName '1.11'\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    productFlavors {\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n    dexOptions {\r\n        incremental false\r\n    }\r\n}\r\n\r\ndependencies {\r\n    compile fileTree(include: ['*.jar'], dir: 'libs')\r\n    testCompile 'junit:junit:4.12'\r\n    compile 'com.android.support:appcompat-v7:23.2.1'\r\n}\r\n\r\nrepositories {\r\n    google()\r\n}\r\nbuildscript {\r\n    repositories {\r\n        google()\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/build.gradle	(date 1596152054214)
+@@ -1,16 +1,18 @@
+ apply plugin: 'com.android.application'
++apply plugin: 'kotlin-android-extensions'
++apply plugin: 'kotlin-android'
+ 
+ android {
+     signingConfigs {
+     }
+-    compileSdkVersion 26
+-    buildToolsVersion '27.0.3'
++
++    compileSdkVersion 29
++    buildToolsVersion '28.0.3'
+     defaultConfig {
+-        applicationId 'com.nelson.mp3fly'
+-        minSdkVersion 16
+-        targetSdkVersion 23
+-        versionCode 11
+-        versionName '1.11'
++        applicationId 'com.seixas.mp3fly'
++        minSdkVersion  16
++        targetSdkVersion 29
++
+     }
+     buildTypes {
+         release {
+@@ -30,13 +32,18 @@
+ }
+ 
+ dependencies {
+-    compile fileTree(include: ['*.jar'], dir: 'libs')
+-    testCompile 'junit:junit:4.12'
+-    compile 'com.android.support:appcompat-v7:23.2.1'
++    implementation fileTree(include: ['*.jar'], dir: 'libs')
++
++    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
++
++    implementation 'androidx.appcompat:appcompat:1.1.0'
++
++    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+ }
+ 
+ repositories {
+     google()
++    mavenCentral()
+ }
+ buildscript {
+     repositories {
+Index: app/src/main/java/com/example/nelson/mp3fly/Tocamedia.java
+===================================================================
+--- app/src/main/java/com/example/nelson/mp3fly/Tocamedia.java	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/java/com/example/nelson/mp3fly/Tocamedia.java	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
+@@ -1,265 +0,0 @@
+-package com.example.nelson.mp3fly;
+-
+-import android.content.Context;
+-import android.media.MediaPlayer;
+-import android.os.Environment;
+-import android.os.storage.StorageManager;
+-
+-import java.io.File;
+-import java.io.FileFilter;
+-import java.io.FilenameFilter;
+-import java.io.IOException;
+-import java.util.ArrayList;
+-import java.util.Collections;
+-import java.util.List;
+-
+-/**
+- * Created by nelson on 04/04/2016.
+- */
+-public class Tocamedia extends MediaPlayer {
+-    private Context context;
+-    private File cartao = Environment.getExternalStorageDirectory();
+-    private List<String> listademusicas;
+-    private List<String> minhaLista;
+-    private FileFilter fileFilter;
+-    private FileFilter novoFilter;
+-    private FileFilter nomedir;
+-    private String camimho;
+-    private Integer duracao;
+-
+-    private List<String> soamusica;
+-    private List<String> musicas;
+-    private List<String> diretorio;
+-    private String[] arqs;
+-    private StorageManager storageManager;
+-    private Environment environment;
+-    private String[] nomediretorio;
+-
+-    public Tocamedia() {
+-    }
+-
+-    public void tocar() {
+-        if (isPlaying()) {
+-            stop(); //Para a musica antes
+-        }
+-        start();
+-    }
+-
+-    public void pausa() {
+-        pause();
+-    }
+-
+-    public void proxima(Integer triha) {
+-        //  selectTrack(triha);
+-    }
+-
+-
+-    public void parar() {
+-        stop();
+-    }
+-
+-    public Integer tempodamusica() {
+-
+-        if (isPlaying()) {
+-
+-            duracao = getDuration();
+-        } else {
+-            duracao = 0;
+-        }
+-
+-        return duracao;
+-    }
+-
+-    public Integer posicao() {
+-        return getCurrentPosition();
+-    }
+-
+-    public void abrir(Integer musica) {
+-
+-        try {
+-            if (isPlaying()) {
+-                stop(); //Para a musica antes se estiver tocando
+-            }
+-            // musicas.contains(musica);
+-            reset();
+-            String teste = musicas.get(musica).toString();
+-            setDataSource(teste);
+-            prepare();
+-
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-        }
+-
+-
+-    }
+-
+-    /*
+-     Verifica se esta tocando
+-      */
+-    public boolean naotocando() {
+-        return isPlaying();
+-    }
+-
+-
+-    //Lista os arquvios
+-    public List<String> listarq() throws IOException {
+-        soamusica = new ArrayList<String>();
+-        musicas = new ArrayList<String>();
+-
+-        File internaldisk0= new File("/storage");
+-        File internaldisk1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+-        File cartao1[]= new File("/storage/").listFiles();
+-
+-        for(File file:cartao1) {
+-            if (file == cartao1[0]) {
+-
+-
+-                File musica[] = new File(String.valueOf(file.getAbsolutePath() + "/MUSICAS/")).listFiles();
+-                File musicaintera[] = new File(String.valueOf(file.getAbsolutePath() + "/Music/")).listFiles();
+-
+-
+-                if(musica!=null){
+-
+-                for (File file1 : musica) {
+-
+-                    musicas.add(file1.getAbsolutePath());
+-                    soamusica.add(file1.getName());
+-                 }
+-
+-                }
+-
+-                if(musicaintera!=null){
+-
+-                    for (File file1Externo : musicaintera) {
+-                        musicas.add(file1Externo.getAbsolutePath());
+-                        soamusica.add(file1Externo.getName());
+-                    }
+-                }
+-
+-            }
+-
+-            else if (file == cartao1[1]) {
+-                File sd1[] = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath()).listFiles();
+-                if(sd1!=null) {
+-                    for (File file2 : sd1) {
+-
+-                        musicas.add(file2.getAbsolutePath());
+-                        soamusica.add(file2.getName());
+-
+-
+-                    }
+-                }
+-            }
+-            else if (file == cartao1[2]) {
+-                File sd2[] = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath()).listFiles();
+-                if(sd2!=null) {
+-                    for (File file3 : sd2) {//if (file1.getAbsolutePath().equals("/MUSICA/"))
+-                        musicas.add(file3.getAbsolutePath());
+-                        soamusica.add(file3.getName());
+-
+-
+-                    }
+-                }
+-            }
+-
+-
+-        }
+-
+-
+-
+-
+-        /*
+-        * Pega as pastas do crtao interno e externo
+-         */
+-
+-       final File storage= new File(internaldisk1.getAbsolutePath());
+-        //final File storage= new File(Audio.Media.IS_MUSIC);
+-
+-
+-        //Se for um diretorio d emusica adciona na lista
+-
+-
+-        /**
+-         * Faz o filtro
+-         */
+-        FilenameFilter fileNameFilter = new FilenameFilter() {
+-
+-            @Override
+-            public boolean accept(File dir, String name) {
+-                if(name.lastIndexOf('.')>0)
+-                {
+-                    // get last index for '.' char
+-                    int lastIndex = name.lastIndexOf('.');
+-
+-                    // get extension
+-                    String str = name.substring(lastIndex);
+-
+-                    // match path name extension
+-                    if(str.equals(".mp3"))
+-                    {
+-                        return true;
+-                    }
+-                }
+-                return false;
+-            }
+-        };
+-
+-
+-
+-
+-        /**
+-        if (storage.isDirectory()) {
+-
+-
+-            File[] list = storage.listFiles(fileNameFilter);
+-
+-            if(list.length > 0 ){
+-                List<File> names = Arrays.asList(list);
+-                Collections.sort(names);
+-                for (File f2 :list) {
+-                    musicas.add(f2.getAbsolutePath());
+-                    soamusica.add(f2.getName());
+-                    soamusica.indexOf(f2);
+-                    // Log.i("PASTA.:/extSdCard/Music", f.getName());
+-                }
+-
+-            }
+-
+-        }
+-     **/
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-        //Le o cartão externo  do celular na pasta Music
+-        /**
+-         * Se o diretorio nao e vazio entao alimenta a lista
+-         */
+-        /**
+-        if (!diretorio.isEmpty()) {
+-
+-
+-            }
+-         **/
+-
+-        Collections.indexOfSubList(musicas, soamusica);
+-
+-
+-        return soamusica;
+-    }
+-
+-    public String getCamimho() {
+-        return camimho;
+-    }
+-
+-    public void setCamimho(String camimho) {
+-        this.camimho = camimho;
+-    }
+-
+-
+-}
+Index: app/src/main/java/com/example/nelson/mp3fly/Tocador.java
+===================================================================
+--- app/src/main/java/com/example/nelson/mp3fly/Tocador.java	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/java/com/example/nelson/mp3fly/Tocador.java	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
+@@ -1,386 +0,0 @@
+-/**
+- * Projeto de MP3
+- * Autor: Nelson Seixas
+- */
+-package com.example.nelson.mp3fly;
+-
+-import android.Manifest;
+-import android.content.pm.PackageManager;
+-import android.os.Bundle;
+-import android.os.Handler;
+-import android.support.v4.app.ActivityCompat;
+-import android.support.v4.content.ContextCompat;
+-import android.support.v7.app.AppCompatActivity;
+-import android.view.View;
+-import android.widget.AdapterView;
+-import android.widget.ArrayAdapter;
+-import android.widget.Button;
+-import android.widget.ImageButton;
+-import android.widget.ListView;
+-import android.widget.ProgressBar;
+-import android.widget.SeekBar;
+-import android.widget.Spinner;
+-import android.widget.TabHost;
+-import android.widget.TextView;
+-import android.widget.Toast;
+-
+-import java.io.IOException;
+-import java.util.List;
+-
+-public class Tocador extends AppCompatActivity {
+-    private ImageButton imageBtproximo; //Botão de sair
+-    private ImageButton imageButton2;
+-    private ImageButton imageButton3;
+-    private ImageButton imageBtSair;
+-    private ImageButton imageBtAnterior;
+-    private Integer posicaonalista;
+-    private Button btsdcad;
+-    private Button btsdExterno;
+-    private TabHost tabHost;
+-    private Button botaoabrir1;
+-    private TabHost.TabSpec tabSpec;
+-    private ListView listaarq;
+-    private View view;
+-    private TextView textView;
+-    private TextView nomenatela;
+-    private List<String> musicas;
+-    private String caminhocompleto;
+-    private String nomedamusica;
+-    private Tocamedia tocamedia;
+-    private ProgressBar progressBar;
+-    private Handler mHandler = new Handler();
+-    private Boolean faz;
+-    private Boolean sairfora;
+-    private SeekBar barra;
+-    private static final int REQUEST_WRITE_STORAGE = 112;
+-
+-    @Override
+-
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-
+-        tocamedia = new Tocamedia();
+-        setContentView(R.layout.activity_tocador);
+-
+-        tabHost = (TabHost) findViewById(R.id.tabHost1);
+-        tabHost.setup();
+-        tabHost.setCurrentTab(0);
+-        tabSpec = tabHost.newTabSpec("Aba1");
+-        tabSpec.setContent(R.id.lista);
+-        tabSpec.setIndicator("Musicas");
+-        tabHost.addTab(tabSpec);
+-
+-        tabSpec = tabHost.newTabSpec("Aba2");
+-        tabSpec.setContent(R.id.musica);
+-        tabSpec.setIndicator("Play");
+-        tabHost.addTab(tabSpec);
+-
+-        imageBtSair = (ImageButton) findViewById(R.id.imageBtSair);
+-        listaarq = (ListView) findViewById(R.id.listademusicas);
+-        textView = (TextView) findViewById(R.id.nomedamusica);
+-        imageButton2 = (ImageButton) findViewById(R.id.player);
+-        imageButton3 = (ImageButton) findViewById(R.id.pausa);
+-        imageBtproximo = (ImageButton) findViewById(R.id.proximo);
+-        imageBtAnterior = (ImageButton) findViewById(R.id.anterior);
+-        nomenatela = (TextView) findViewById(R.id.nomenatela);
+-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+-        barra = (SeekBar) findViewById(R.id.seekBar);
+-        barra.setVisibility(SeekBar.INVISIBLE);
+-        progressBar.setVisibility(ProgressBar.INVISIBLE);
+-        nomenatela.setVisibility(TextView.INVISIBLE);
+-        posicaonalista = 0;
+-        faz = false;
+-        sairfora = false;
+-
+-        /**
+-         * Da permissão ao aplicação para escrever no cartao sd interno ou externo
+-         */
+-        int permissionCheck1 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+-        int permissionCheck2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+-       // int permissionCheck3= ContextCompat.checkSelfPermission(this, Manifest.permission.R);
+-        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+-        if (permissionCheck1 != PackageManager.PERMISSION_GRANTED || permissionCheck2 != PackageManager.PERMISSION_GRANTED) {
+-            ActivityCompat.requestPermissions(this,
+-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+-                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
+-        }
+-
+-
+-        try {
+-            caminho();
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-        }
+-
+-        //Toca musica
+-        imageButton2.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                faz = true;
+-                tocamedia.tocar();
+-                MostraBarraTitulo();
+-
+-            }
+-        });
+-        /*
+-        Botão de pausa da música
+-         */
+-        imageButton3.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                faz = false;
+-                tocamedia.pausa();
+-                // progressBar.setVisibility(ProgressBar.INVISIBLE);
+-
+-            }
+-        });
+-
+-        /*
+-        Botão anterior
+-         */
+-        imageBtAnterior.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                if (faz.equals(true)) {
+-                    anterior();
+-                }
+-            }
+-        });
+-
+-         /*
+-         Proxima musica
+-          */
+-        imageBtproximo.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                if (faz.equals(true)) {
+-                    proxima();
+-                }
+-
+-            }
+-        });
+-
+-        /*
+-        Sai do sistema
+-         */
+-        imageBtSair.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Toast.makeText(Tocador.this, "Saindo do Tocador", Toast.LENGTH_SHORT).show();
+-                tocamedia.parar();
+-                sairfora = true;
+-                faz = false;
+-                Thread.currentThread().interrupt();
+-                finish();
+-            }
+-        });
+-
+-       /*
+-       Seleciona a musica da lista
+-        */
+-        listaarq.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+-
+-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+-                String musica = (String) parent.getItemAtPosition(position).toString();
+-                faz = true;
+-                //tocamedia.abrir(tocamedia.getCamimho() + "/" + musica);
+-
+-                tabHost.setCurrentTab(1);
+-                posicaonalista = position;
+-                tocamedia.abrir(posicaonalista);
+-                nomenatela.setText(musica + " - Dur. " + CoverteHora(tocamedia.getDuration()));
+-                MostraBarraTitulo();
+-                tocamedia.tocar();
+-            }
+-        });
+-
+-        listaarq.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+-
+-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+-                String musica = (String) parent.getItemAtPosition(position).toString();
+-                tocamedia.abrir(position);
+-                nomenatela.setText(musica + " - Dur. " + CoverteHora(tocamedia.getDuration()));
+-                MostraBarraTitulo();
+-                tocamedia.tocar();
+-                return false;
+-            }
+-
+-        });
+-
+-        //Posiciona a musica pelo SeekTo na trilha
+-        barra.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+-            @Override
+-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+-
+-            }
+-
+-            @Override
+-            public void onStartTrackingTouch(SeekBar seekBar) {
+-
+-            }
+-
+-            @Override
+-            public void onStopTrackingTouch(SeekBar seekBar) {
+-                tocamedia.seekTo(seekBar.getProgress());
+-
+-            }
+-        });
+-    }
+-
+-
+-    @Override
+-    protected void onSaveInstanceState(Bundle outState) {
+-        super.onSaveInstanceState(outState);
+-
+-
+-    }
+-
+-    @Override
+-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+-        super.onRestoreInstanceState(savedInstanceState);
+-
+-        onRestoreInstanceState(savedInstanceState);
+-
+-    }
+-
+-
+-    /**
+-     * Alimenta a lista de musicas
+-     */
+-    public void caminho() throws IOException {
+-        musicas = tocamedia.listarq();
+-
+-        // Collections.sort(musicas);
+-        ArrayAdapter<String> teste1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, musicas);
+-
+-        listaarq.setAdapter(teste1);
+-        listaarq.setItemsCanFocus(true);
+-    }
+-
+-    /**
+-     * Metodo da proxima musica
+-     */
+-    public void proxima() {
+-        // Collections.sort(musicas);
+-        if (sairfora.equals(false)) {
+-            try {
+-
+-                if (posicaonalista == listaarq.getCount()) {
+-                    Toast.makeText(Tocador.this, "Final da lista de músicas voltando ao inicio da lista .", Toast.LENGTH_SHORT).show();
+-                    posicaonalista = 1; //Seta a posição na lista
+-                    anterior();
+-                } else {
+-                    posicaonalista = posicaonalista + 1;
+-                    String musica = listaarq.getItemAtPosition(posicaonalista).toString();
+-                    tocamedia.abrir(posicaonalista);
+-                    nomenatela.setText(musica + " - Dur. " + CoverteHora(tocamedia.getDuration()));
+-                    if (tocamedia.naotocando()) {
+-                        tocamedia.stop();
+-                    }
+-                    MostraBarraTitulo();
+-                    tocamedia.tocar();
+-                }
+-
+-            } catch (Exception e) {
+-                Toast.makeText(Tocador.this, "Final da lista de músicas voltando ao inicio da lista.", Toast.LENGTH_SHORT).show();
+-                posicaonalista = 1; //Seta a posição na lista
+-                anterior();
+-            }
+-        }
+-
+-    }
+-
+-    /**
+-     * Método da musica posterior
+-     */
+-    public void anterior() {
+-        // Collections.sort(musicas);
+-        try {
+-            if (posicaonalista == 0) {
+-                Toast.makeText(Tocador.this, "Inicio da lista de musica", Toast.LENGTH_SHORT).show();
+-            } else {
+-                posicaonalista = posicaonalista - 1;
+-                String musica = listaarq.getItemAtPosition(posicaonalista).toString();
+-                tocamedia.abrir(posicaonalista);
+-                nomenatela.setText(musica + " - Dur. " + CoverteHora(tocamedia.getDuration()));
+-                MostraBarraTitulo();
+-                tocamedia.tocar();
+-            }
+-        } catch (Exception e) {
+-            Toast.makeText(Tocador.this, "Inicio da lista de musica", Toast.LENGTH_SHORT).show();
+-        }
+-    }
+-
+-    /*
+-    Thead que atualiza a barra da musica
+-     */
+-    public void atualizabarra() {
+-        new Thread(new Runnable() {
+-            @Override
+-            public void run() {
+-                final int teste = (tocamedia.getDuration());
+-                // progressBar.setMax(teste);
+-                barra.setMax(teste);
+-                {
+-                    for (int a = 1; a < teste; a++) {
+-                        final int finalA = a;
+-                        mHandler.post(new Runnable() {
+-                            @Override
+-                            public void run() {
+-                                if ((!tocamedia.naotocando()) && sairfora.equals(false) && faz == true) {
+-                                    Thread.currentThread().interrupt();
+-                                    proxima();
+-                                } else {
+-                                    //progressBar.setProgress(tocamedia.getCurrentPosition());
+-                                    barra.setProgress(tocamedia.getCurrentPosition());
+-                                    // Log.v("Teste", "Posicao" + finalA +" Posicao na lista "+posicaonalista);
+-                                }
+-                            }
+-                        });
+-                        try {
+-
+-                            if (sairfora.equals(true)) {
+-                                tocamedia.reset();
+-                                Thread.currentThread().interrupt();
+-                            }
+-
+-                            Thread.sleep(200);
+-                        } catch (InterruptedException e) {
+-                            e.printStackTrace();
+-                        }
+-
+-                    }
+-                }
+-
+-            }
+-        }).start();
+-    }
+-
+-    /**
+-     * Atualiza a barra e o titulo da musica
+-     */
+-    public void MostraBarraTitulo() {
+-        // progressBar.setVisibility(ProgressBar.VISIBLE);
+-        nomenatela.setVisibility(TextView.VISIBLE);
+-        barra.setVisibility(Spinner.VISIBLE);
+-        atualizabarra();
+-    }
+-
+-
+-    /**
+-     * Coverte msg em horas
+-     * @param recebe
+-     * @return
+-     */
+-    public String CoverteHora(Integer recebe) {
+-        Integer segundos = (recebe / 1000) % 60;
+-        Integer minutos = (recebe / 60000) % 60;
+-        Integer horas = (recebe / 3600000) % 24;
+-        String recebe1 = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+-        return recebe1;
+-    }
+-
+-}
+-
+-
+-
+Index: mylibrary/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mylibrary/src/main/AndroidManifest.xml	(date 1596152473946)
++++ mylibrary/src/main/AndroidManifest.xml	(date 1596152473946)
+@@ -0,0 +1,2 @@
++<manifest
++        package="com.example.mylibrary"/>
+Index: projectFilesBackup1/.idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- projectFilesBackup1/.idea/workspace.xml	(date 1596155050000)
++++ projectFilesBackup1/.idea/workspace.xml	(date 1596155050000)
+@@ -0,0 +1,433 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="AnalysisUIOptions">
++    <option name="SCOPE_TYPE" value="8" />
++    <option name="CUSTOM_SCOPE_NAME" value="All Places" />
++  </component>
++  <component name="AndroidLayouts">
++    <shared>
++      <config />
++    </shared>
++  </component>
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
++  <component name="BranchesTreeState">
++    <expand>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++    </expand>
++    <select />
++  </component>
++  <component name="ChangeListManager">
++    <list default="true" id="1641a026-b087-4c6b-8265-a7476a667dde" name="Default Changelist" comment="">
++      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/externalDependencies.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/seixas/mp3fly/Teste.kt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/.name" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/codeStyles/Project.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/gradle.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/kotlinc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_animated_vector_drawable_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_animated_vector_drawable_23_2_1.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_appcompat_v7_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_appcompat_v7_23_2_1.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_annotations_23_2_1_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_annotations_23_2_1_jar.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_v4_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_v4_23_2_1.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_vector_drawable_23_2_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/com_android_support_support_vector_drawable_23_2_1.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/junit_junit_4_12_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/junit_junit_4_12_jar.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/libraries/org_hamcrest_hamcrest_core_1_3_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/libraries/org_hamcrest_hamcrest_core_1_3_jar.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/modules.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/runConfigurations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/runConfigurations.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/app-release.apk" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradlew" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/app/gradlew.bat" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/local.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/release/app-release.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/app-release.apk" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/output.json" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/nelson/mp3fly/Tocador.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/nelson/mp3fly/Tocamedia.java" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_tocador.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_tocador.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/mp3l2.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/mp3l2.png" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-w820dp/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-w820dp/dimens.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
++    </list>
++    <option name="SHOW_DIALOG" value="false" />
++    <option name="HIGHLIGHT_CONFLICTS" value="true" />
++    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
++    <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="CompilerWorkspaceConfiguration">
++    <option name="PARALLEL_COMPILATION" value="true" />
++  </component>
++  <component name="ExternalProjectsData">
++    <projectState path="$PROJECT_DIR$">
++      <ProjectState />
++    </projectState>
++  </component>
++  <component name="ExternalProjectsManager">
++    <system id="GRADLE">
++      <state>
++        <task path="$PROJECT_DIR$/app">
++          <activation />
++        </task>
++        <task path="$PROJECT_DIR$">
++          <activation />
++        </task>
++        <projects_view>
++          <tree_state>
++            <expand />
++            <select />
++          </tree_state>
++        </projects_view>
++      </state>
++    </system>
++  </component>
++  <component name="GenerateSignedApkSettings">
++    <option name="EXPORT_PRIVATE_KEY" value="false" />
++    <option name="KEY_STORE_PATH" value="$PROJECT_DIR$/../chaves/mp3fly.jks" />
++    <option name="KEY_ALIAS" value="umpload" />
++    <option name="REMEMBER_PASSWORDS" value="true" />
++    <option name="BUILD_TARGET_KEY" value="apk" />
++  </component>
++  <component name="Git.Settings">
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="GroovyConsoleState">
++    <option name="list">
++      <list>
++        <Entry>
++          <option name="url" value="file://$APPLICATION_CONFIG_DIR$/consoles/groovy/groovy_console.groovy" />
++        </Entry>
++      </list>
++    </option>
++  </component>
++  <component name="ProjectId" id="1aqBGkdjc0VZIoxJwZiVJjpThBu" />
++  <component name="ProjectViewState">
++    <option name="hideEmptyMiddlePackages" value="true" />
++    <option name="showLibraryContents" value="true" />
++  </component>
++  <component name="PropertiesComponent">
++    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/app/release/app-release.apk" />
++    <property name="ApkExportedModule" value="app" />
++    <property name="BundleExportedModule" value="app" />
++    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Galaxy_Nexus_API_28" />
++    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-05-03T22:20:10.376181Z" />
++    <property name="Downloaded.Files.Path.Enabled" value="false" />
++    <property name="ExportApk.ApkPath" value="$PROJECT_DIR$/app" />
++    <property name="ExportApk.BuildVariants" value="release" />
++    <property name="ExportApk.SignV1" value="true" />
++    <property name="ExportApk.SignV2" value="true" />
++    <property name="Repository.Attach.Annotations" value="false" />
++    <property name="Repository.Attach.JavaDocs" value="false" />
++    <property name="Repository.Attach.Sources" value="false" />
++    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
++    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
++    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
++    <property name="SelectDeploymentTargetsDialog.selectedDevices" value="192.168.56.101:5555" />
++    <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
++    <property name="dart.analysis.tool.window.visible" value="false" />
++    <property name="last_opened_file_path" value="$USER_HOME$/.jdks/openjdk-14.0.2" />
++    <property name="project.structure.last.edited" value="Project" />
++    <property name="project.structure.proportion" value="0.2839161" />
++    <property name="project.structure.side.proportion" value="0.43683589" />
++    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
++    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
++    <property name="show.migrate.to.gradle.popup" value="false" />
++    <property name="show.unlinked.gradle.project.popup" value="true" />
++  </component>
++  <component name="PsdUISettings">
++    <option name="LAST_EDITED_BUILD_TYPE" value="release" />
++  </component>
++  <component name="RecentsManager">
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi" />
++    </key>
++  </component>
++  <component name="RunAnythingCache">
++    <option name="myCommands">
++      <command value="gradle --build-file" />
++    </option>
++  </component>
++  <component name="RunManager" selected="Android App.Mp3">
++    <configuration name="Mp3" type="AndroidRunConfigurationType" factoryName="Android App">
++      <option name="DEPLOY" value="true" />
++      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
++      <option name="DEPLOY_AS_INSTANT" value="false" />
++      <option name="ARTIFACT_NAME" value="" />
++      <option name="PM_INSTALL_OPTIONS" value="" />
++      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
++      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
++      <option name="MODE" value="do_nothing" />
++      <option name="CLEAR_LOGCAT" value="false" />
++      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
++      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="false" />
++      <option name="FORCE_STOP_RUNNING_APP" value="true" />
++      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
++      <option name="DEBUGGER_TYPE" value="Java" />
++      <Java />
++      <Profilers>
++        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
++        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
++        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
++      </Profilers>
++      <option name="DEEP_LINK" value="" />
++      <option name="ACTIVITY_CLASS" value="" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="/home/nelson/backupnovo/Mp3Fly/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$/build.gradle" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list />
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
++      <method v="2" />
++    </configuration>
++    <configuration name="/home/nelson/backupnovo/Mp3Fly/mylibrary/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
++      <ExternalSystemSettings>
++        <option name="executionName" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$/mylibrary/build.gradle" />
++        <option name="externalSystemIdString" value="GRADLE" />
++        <option name="scriptParameters" />
++        <option name="taskDescriptions">
++          <list />
++        </option>
++        <option name="taskNames">
++          <list />
++        </option>
++        <option name="vmOptions" />
++      </ExternalSystemSettings>
++      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
++      <method v="2" />
++    </configuration>
++    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy" singleton="false">
++      <module name="Mp3Fly" />
++      <setting name="path" value="" />
++      <setting name="vmparams" value="" />
++      <setting name="params" value="" />
++      <setting name="workDir" value="file://$PROJECT_DIR$" />
++      <setting name="debug" value="false" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="All in Mp3Fly" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
++      <module name="Mp3Fly" />
++      <useClassPathOnly />
++      <option name="PACKAGE_NAME" value="" />
++      <option name="MAIN_CLASS_NAME" value="" />
++      <option name="METHOD_NAME" value="" />
++      <option name="TEST_OBJECT" value="package" />
++      <option name="PARAMETERS" value="" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="app in Mp3Fly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
++      <module name="Mp3Fly" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="app.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <option name="PACKAGE_NAME" value="app" />
++      <option name="TEST_OBJECT" value="package" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="JUnit.app in Mp3Fly" />
++        <item itemvalue="Gradle./home/nelson/backupnovo/Mp3Fly/build.gradle" />
++        <item itemvalue="JUnit.All in Mp3Fly" />
++        <item itemvalue="Gradle./home/nelson/backupnovo/Mp3Fly/mylibrary/build.gradle" />
++      </list>
++    </recent_temporary>
++  </component>
++  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
++  <component name="SvnConfiguration">
++    <configuration />
++  </component>
++  <component name="TaskManager">
++    <task active="true" id="Default" summary="Default task">
++      <changelist id="1641a026-b087-4c6b-8265-a7476a667dde" name="Default Changelist" comment="" />
++      <created>1587453150124</created>
++      <option name="number" value="Default" />
++      <option name="presentableId" value="Default" />
++      <updated>1587453150124</updated>
++    </task>
++    <servers />
++  </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++    <option name="oldMeFiltersMigrated" value="true" />
++  </component>
++  <component name="WindowStateProjectService">
++    <state x="455" y="760" width="1000" height="885" key="#Plugins" timestamp="1596152374275">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="455" y="760" width="1000" height="885" key="#Plugins/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596152374275" />
++    <state x="139" y="690" width="1641" height="1026" key="#Project_Structure" timestamp="1596155031652">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="139" y="690" width="1641" height="1026" key="#Project_Structure/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155031652" />
++    <state x="417" y="814" width="1347" height="902" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596154726903">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="417" y="814" width="1347" height="902" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154726903" />
++    <state x="1783" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588544452752" />
++    <state x="622" y="927" width="655" height="554" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1596153886648">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="622" y="927" width="655" height="554" key="#com.intellij.ide.util.PackageChooserDialog/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596153886648" />
++    <state x="592" y="1120" width="460" height="330" key="#com.intellij.tools.ToolEditorDialog" timestamp="1588541752246">
++      <screen x="0" y="906" width="1366" height="768" />
++    </state>
++    <state x="592" y="1120" width="460" height="330" key="#com.intellij.tools.ToolEditorDialog/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541752246" />
++    <state x="704" y="1065" width="890" height="381" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1596154761140">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="704" y="1065" width="890" height="381" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154761140" />
++    <state x="2070" y="375" width="563" height="322" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588544313368" />
++    <state x="1656" y="397" width="894" height="601" key="AVDManager" timestamp="1588542737470">
++      <screen x="1366" y="0" width="1920" height="1080" />
++    </state>
++    <state x="282" y="945" width="894" height="601" key="AVDManager/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541114152" />
++    <state x="1656" y="397" width="894" height="601" key="AVDManager/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588542737470" />
++    <state x="1908" y="296" width="826" height="481" key="AndroidCreateResourceDirectoryDialog" timestamp="1588376535673">
++      <screen x="1366" y="0" width="1920" height="1080" />
++    </state>
++    <state x="1908" y="296" width="826" height="481" key="AndroidCreateResourceDirectoryDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588376535673" />
++    <state x="1903" y="293" width="826" height="481" key="AndroidCreateResourceFileDialog" timestamp="1588377914263">
++      <screen x="1366" y="0" width="1920" height="1080" />
++    </state>
++    <state x="1903" y="293" width="826" height="481" key="AndroidCreateResourceFileDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588377914263" />
++    <state x="2183" y="305" width="276" height="463" key="AndroidProcessChooserDialog" timestamp="1588392782733">
++      <screen x="1366" y="0" width="1920" height="1080" />
++    </state>
++    <state x="2183" y="305" width="276" height="463" key="AndroidProcessChooserDialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588392782733" />
++    <state x="737" y="983" width="1013" height="483" key="FileChooserDialogImpl" timestamp="1596154896462">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="524" y="1288" width="308" height="343" key="FileChooserDialogImpl/0.1080.1366.768/1366.0.1920.1080@0.1080.1366.768" timestamp="1588875616107" />
++    <state x="737" y="983" width="1013" height="483" key="FileChooserDialogImpl/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154896462" />
++    <state x="524" y="1114" width="426" height="481" key="FileChooserDialogImpl/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541980061" />
++    <state x="2103" y="293" width="788" height="508" key="FileChooserDialogImpl/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588542215983" />
++    <state width="1858" height="252" key="GridCell.Tab.0.bottom" timestamp="1596155050390">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state width="1876" height="2" key="GridCell.Tab.0.bottom/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902158" />
++    <state width="1858" height="252" key="GridCell.Tab.0.bottom/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050390" />
++    <state width="938" height="631" key="GridCell.Tab.0.bottom/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
++    <state width="938" height="304" key="GridCell.Tab.0.bottom/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785705" />
++    <state width="1858" height="252" key="GridCell.Tab.0.center" timestamp="1596155050389">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state width="1876" height="2" key="GridCell.Tab.0.center/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902157" />
++    <state width="1858" height="252" key="GridCell.Tab.0.center/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050389" />
++    <state width="938" height="631" key="GridCell.Tab.0.center/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
++    <state width="938" height="304" key="GridCell.Tab.0.center/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785705" />
++    <state width="1858" height="252" key="GridCell.Tab.0.left" timestamp="1596155050389">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state width="1876" height="2" key="GridCell.Tab.0.left/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902157" />
++    <state width="1858" height="252" key="GridCell.Tab.0.left/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050389" />
++    <state width="938" height="631" key="GridCell.Tab.0.left/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
++    <state width="938" height="304" key="GridCell.Tab.0.left/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785704" />
++    <state width="1858" height="252" key="GridCell.Tab.0.right" timestamp="1596155050390">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state width="1876" height="2" key="GridCell.Tab.0.right/0.1001.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1587539902157" />
++    <state width="1858" height="252" key="GridCell.Tab.0.right/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596155050390" />
++    <state width="938" height="631" key="GridCell.Tab.0.right/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588541290865" />
++    <state width="938" height="304" key="GridCell.Tab.0.right/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545785705" />
++    <state x="1908" y="284" width="706" height="505" key="IDE.errors.dialog" timestamp="1588545042229">
++      <screen x="1366" y="0" width="1920" height="1080" />
++    </state>
++    <state x="386" y="1108" width="706" height="505" key="IDE.errors.dialog/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588537270576" />
++    <state x="1908" y="284" width="826" height="505" key="IDE.errors.dialog/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545042229" />
++    <state x="289" y="690" width="1631" height="1026" key="SettingsEditor" timestamp="1596154965072">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="314" y="38" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1596149264213" />
++    <state x="289" y="690" width="1631" height="1026" key="SettingsEditor/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596154965072" />
++    <state x="314" y="906" width="1026" height="763" key="SettingsEditor/0.906.1366.768/1366.0.1920.1080@0.906.1366.768" timestamp="1588542020676" />
++    <state x="1808" y="115" width="1026" height="842" key="SettingsEditor/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588545307923" />
++    <state x="684" y="1073" width="947" height="262" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1596150575866">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="684" y="1073" width="947" height="262" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596150575866" />
++    <state x="663" y="1097" width="593" height="212" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596152483423">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="663" y="1097" width="593" height="212" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596152483423" />
++    <state x="624" y="938" width="840" height="1034" key="run.anything.popup" timestamp="1596152148671">
++      <screen x="0" y="690" width="1920" height="1080" />
++    </state>
++    <state x="624" y="938" width="840" height="1034" key="run.anything.popup/0.690.1920.1080/1920.0.1920.1080@0.690.1920.1080" timestamp="1596152148671" />
++    <state x="1990" y="248" key="run.anything.popup/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588544055149" />
++    <state x="1989" y="238" key="search.everywhere.popup" timestamp="1588381295985">
++      <screen x="1366" y="0" width="1920" height="1080" />
++    </state>
++    <state x="1989" y="238" key="search.everywhere.popup/0.906.1366.768/1366.0.1920.1080@1366.0.1920.1080" timestamp="1588381295985" />
++  </component>
++  <component name="com.intellij.coverage.CoverageDataManagerImpl">
++    <SUITE FILE_PATH="coverage/Mp3Fly$app_in_Mp3Fly.ic" NAME="app in Mp3Fly Coverage Results" MODIFIED="1596154795078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
++      <FILTER>app.*</FILTER>
++    </SUITE>
++  </component>
++</project>
+\ No newline at end of file
+Index: settings.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>include ':app'\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- settings.gradle	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ settings.gradle	(date 1596150073336)
+@@ -1,1 +1,2 @@
+ include ':app'
++include ':mylibrary'
+Index: mylibrary/src/androidTest/java/com/example/mylibrary/ExampleInstrumentedTest.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mylibrary/src/androidTest/java/com/example/mylibrary/ExampleInstrumentedTest.kt	(date 1596150150292)
++++ mylibrary/src/androidTest/java/com/example/mylibrary/ExampleInstrumentedTest.kt	(date 1596150150292)
+@@ -0,0 +1,24 @@
++package com.example.mylibrary
++
++import androidx.test.platform.app.InstrumentationRegistry
++import androidx.test.ext.junit.runners.AndroidJUnit4
++
++import org.junit.Test
++import org.junit.runner.RunWith
++
++import org.junit.Assert.*
++
++/**
++ * Instrumented test, which will execute on an Android device.
++ *
++ * See [testing documentation](http://d.android.com/tools/testing).
++ */
++@RunWith(AndroidJUnit4::class)
++class ExampleInstrumentedTest {
++    @Test
++    fun useAppContext() {
++        // Context of the app under test.
++        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
++        assertEquals("com.example.mylibrary.test", appContext.packageName)
++    }
++}
+Index: mylibrary/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mylibrary/.gitignore	(date 1596150073848)
++++ mylibrary/.gitignore	(date 1596150073848)
+@@ -0,0 +1,1 @@
++/build
+Index: gradle.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Project-wide Gradle settings.\r\n\r\n# IDE (e.g. Android Studio) users:\r\n# Gradle settings configured through the IDE *will override*\r\n# any settings specified in this file.\r\n\r\n# For more details on how to configure your build environment visit\r\n# http://www.gradle.org/docs/current/userguide/build_environment.html\r\n\r\n# Specifies the JVM arguments used for the daemon process.\r\n# The setting is particularly useful for tweaking memory settings.\r\n# Default value: -Xmx10248m -XX:MaxPermSize=256m\r\n# org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8\r\n\r\n# When configured, Gradle will run in incubating parallel mode.\r\n# This option should only be used with decoupled projects. More details, visit\r\n# http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects\r\n# org.gradle.parallel=true
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradle.properties	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ gradle.properties	(date 1596157535010)
+@@ -15,4 +15,6 @@
+ # When configured, Gradle will run in incubating parallel mode.
+ # This option should only be used with decoupled projects. More details, visit
+ # http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
+-# org.gradle.parallel=true
+\ No newline at end of file
++# org.gradle.parallel=true
++android.enableJetifier=false
++android.useAndroidX=false
+\ No newline at end of file
+Index: mylibrary/src/test/java/com/example/mylibrary/ExampleUnitTest.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mylibrary/src/test/java/com/example/mylibrary/ExampleUnitTest.kt	(date 1596150150268)
++++ mylibrary/src/test/java/com/example/mylibrary/ExampleUnitTest.kt	(date 1596150150268)
+@@ -0,0 +1,17 @@
++package com.example.mylibrary
++
++import org.junit.Test
++
++import org.junit.Assert.*
++
++/**
++ * Example local unit test, which will execute on the development machine (host).
++ *
++ * See [testing documentation](http://d.android.com/tools/testing).
++ */
++class ExampleUnitTest {
++    @Test
++    fun addition_isCorrect() {
++        assertEquals(4, 2 + 2)
++    }
++}
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\n\r\nbuildscript {\r\n    repositories {\r\n        jcenter()\r\n        google()\r\n    }\r\n    dependencies {\r\n        classpath 'com.android.tools.build:gradle:3.1.2'\r\n\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        jcenter()\r\n        google()\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ build.gradle	(date 1596155573442)
+@@ -1,12 +1,14 @@
+ // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ 
+ buildscript {
++    ext.kotlin_version = '1.3.72'
+     repositories {
+         jcenter()
+         google()
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:3.1.2'
++        classpath 'com.android.tools.build:gradle:4.0.1'
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+ 
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+@@ -23,3 +25,9 @@
+ task clean(type: Delete) {
+     delete rootProject.buildDir
+ }
++
++repositories {
++    mavenCentral()
++}
++
++
+Index: .idea/externalDependencies.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/externalDependencies.xml	(date 1596152673701)
++++ .idea/externalDependencies.xml	(date 1596152673701)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalDependencies">
++    <plugin id="org.jetbrains.android" />
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.nelson.mp3fly\"\r\n    android:versionCode=\"8\"\r\n    android:versionName=\"1.8\">\r\n    <permission android:name=\"com.example.nelson.mp3fly.permission.DEADLY_ACTIVITY\"\r\n\r\n        android:permissionGroup=\"android.permission-group.STORAGE\"\r\n        android:label=\"Teste\"\r\n        android:protectionLevel=\"normal\" />\r\n\r\n\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_DOWNLOAD_MANAGER\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.EXTRA_STORAGE_VOLUME\"/>\r\n    <uses-permission android:name=\"android.permission.\"/>\r\n\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/mp3l2\"\r\n        android:label=\"@string/app_name\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity\r\n            android:name=\".Tocador\"\r\n            android:configChanges=\"orientation|screenSize\"\r\n            android:launchMode=\"singleTop\"\r\n            android:finishOnTaskLaunch=\"true\"\r\n            android:multiprocess=\"false\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n\r\n</manifest>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/AndroidManifest.xml	(date 1596150164256)
+@@ -1,22 +1,23 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="com.example.nelson.mp3fly"
++          xmlns:tools="http://schemas.android.com/tools" package="com.seixas.mp3fly"
+     android:versionCode="8"
+     android:versionName="1.8">
+-    <permission android:name="com.example.nelson.mp3fly.permission.DEADLY_ACTIVITY"
++    <uses-sdk
++
++            android:targetSdkVersion="29" />
+ 
+-        android:permissionGroup="android.permission-group.STORAGE"
++    <permission android:name="com.seixas.mp3fly.permission.DEADLY_ACTIVITY"
++
+         android:label="Teste"
+         android:protectionLevel="normal" />
+-
+-
+-
+     <uses-permission android:name="android.permission.INTERNET" />
+-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
++     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
++    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.EXTRA_STORAGE_VOLUME"/>
+-    <uses-permission android:name="android.permission."/>
++    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
++
+ 
+ 
+     <application
+@@ -24,13 +25,16 @@
+         android:icon="@mipmap/mp3l2"
+         android:label="@string/app_name"
+         android:supportsRtl="true"
++
++        android:usesCleartextTraffic="true"
+         android:theme="@style/AppTheme">
+         <activity
+-            android:name=".Tocador"
+-            android:configChanges="orientation|screenSize"
+-            android:launchMode="singleTop"
+-            android:finishOnTaskLaunch="true"
+-            android:multiprocess="false">
++                android:name=".Tocador"
++                android:configChanges="orientation|screenSize"
++                android:screenOrientation="portrait"
++                android:launchMode="singleTop"
++                android:finishOnTaskLaunch="true"
++                android:multiprocess="false" tools:ignore="LockedOrientationActivity">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+                 <category android:name="android.intent.category.LAUNCHER" />
+Index: .idea/kotlinc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/kotlinc.xml	(date 1596145737527)
++++ .idea/kotlinc.xml	(date 1596145737527)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Kotlin2JvmCompilerArguments">
++    <option name="jvmTarget" value="1.8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_tocador.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<TabHost android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:id=\"@+id/tabHost1\"\r\n    android:layout_alignParentTop=\"true\"\r\n    android:layout_centerHorizontal=\"true\"\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:orientation=\"vertical\">\r\n\r\n        <TabWidget\r\n            android:id=\"@android:id/tabs\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"#78ce6b\"\r\n            android:focusable=\"true\"\r\n            android:touchscreenBlocksFocus=\"true\"\r\n            android:layoutMode=\"opticalBounds\"></TabWidget>\r\n\r\n        <FrameLayout\r\n            android:id=\"@android:id/tabcontent\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\">\r\n\r\n\r\n            <LinearLayout\r\n                android:id=\"@+id/Lista\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\"\r\n                android:clickable=\"false\"\r\n                android:weightSum=\"1\">\r\n\r\n                <RelativeLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:id=\"@+id/musica\"\r\n                    android:background=\"#fd9311\">\r\n\r\n                    <ImageButton\r\n                        android:layout_width=\"80px\"\r\n                        android:layout_height=\"80px\"\r\n                        android:id=\"@+id/player\"\r\n                        android:src=\"@android:drawable/ic_media_play\"\r\n                        android:layout_alignParentTop=\"true\"\r\n                        android:layout_toStartOf=\"@+id/imageBtSair\" />\r\n\r\n                    <ImageButton\r\n                        android:layout_width=\"80px\"\r\n                        android:layout_height=\"80px\"\r\n                        android:id=\"@+id/pausa\"\r\n                        android:src=\"@android:drawable/ic_media_pause\"\r\n                        android:layout_alignParentTop=\"true\"\r\n                        android:layout_toEndOf=\"@+id/imageBtSair\" />\r\n\r\n                    <ImageButton\r\n                        android:layout_width=\"80px\"\r\n                        android:layout_height=\"80px\"\r\n                        android:id=\"@+id/proximo\"\r\n                        android:src=\"@android:drawable/ic_media_next\"\r\n                        android:layout_alignParentTop=\"true\"\r\n                        android:layout_alignParentEnd=\"true\" />\r\n\r\n                    <ImageButton\r\n                        android:layout_width=\"150px\"\r\n                        android:layout_height=\"100px\"\r\n                        android:id=\"@+id/imageBtSair\"\r\n                        android:src=\"@android:drawable/ic_menu_close_clear_cancel\"\r\n                        android:layout_marginBottom=\"30dp\"\r\n                        android:layout_alignParentBottom=\"true\"\r\n                        android:layout_centerHorizontal=\"true\" />\r\n\r\n                    <TextView\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:textAppearance=\"?android:attr/textAppearanceSmall\"\r\n                        android:text=\"Nome da Música\"\r\n                        android:id=\"@+id/nomenatela\"\r\n                        android:textAlignment=\"center\"\r\n                        android:textColor=\"#161512\"\r\n                        android:textSize=\"16dp\"\r\n                        android:autoText=\"false\"\r\n                        android:allowUndo=\"false\"\r\n                        android:elegantTextHeight=\"false\"\r\n                        android:maxLength=\"350\"\r\n                        android:maxHeight=\"350dp\"\r\n                        android:gravity=\"center\"\r\n                        android:textStyle=\"bold\"\r\n                        android:layout_below=\"@+id/player\"\r\n                        android:layout_centerHorizontal=\"true\"\r\n                        android:layout_marginTop=\"133dp\" />\r\n\r\n                    <ProgressBar\r\n                        style=\"?android:attr/progressBarStyleHorizontal\"\r\n                        android:layout_width=\"300dp\"\r\n                        android:layout_height=\"50dp\"\r\n                        android:id=\"@+id/progressBar\"\r\n                        android:layout_above=\"@+id/imageBtSair\"\r\n                        android:layout_centerHorizontal=\"true\" />\r\n\r\n                    <ImageButton\r\n                        android:layout_width=\"80px\"\r\n                        android:layout_height=\"80px\"\r\n                        android:id=\"@+id/anterior\"\r\n                        android:src=\"@android:drawable/ic_media_previous\" />\r\n\r\n                    <SeekBar\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:id=\"@+id/seekBar\"\r\n                        android:background=\"#1978d8\"\r\n                        android:layout_above=\"@+id/progressBar\"\r\n                        android:layout_alignStart=\"@+id/progressBar\"\r\n                        android:layout_marginBottom=\"27dp\"\r\n                        android:layout_alignEnd=\"@+id/progressBar\" />\r\n\r\n\r\n                </RelativeLayout>\r\n\r\n\r\n            </LinearLayout>\r\n\r\n            <LinearLayout\r\n                android:id=\"@+id/Play\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\">\r\n\r\n\r\n                <RelativeLayout\r\n                    android:id=\"@+id/lista\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:background=\"#9d41e8c9\">\r\n\r\n                    <ListView\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:id=\"@+id/listademusicas\"\r\n                        android:layout_gravity=\"right\"\r\n                        android:background=\"#53c3ef\"\r\n                        android:scrollingCache=\"false\"\r\n                        android:layout_alignParentEnd=\"true\"\r\n                        android:layout_alignParentStart=\"true\" />\r\n\r\n                    <TextView\r\n                        android:layout_width=\"10px\"\r\n                        android:layout_height=\"11px\"\r\n                        android:id=\"@+id/nomedamusica\"\r\n                        android:textColor=\"#fffafa\" />\r\n\r\n\r\n                </RelativeLayout>\r\n\r\n\r\n            </LinearLayout>\r\n\r\n        </FrameLayout>\r\n    </LinearLayout>\r\n</TabHost>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_tocador.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/res/layout/activity_tocador.xml	(date 1596150164352)
+@@ -1,121 +1,146 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<TabHost android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:id="@+id/tabHost1"
+-    android:layout_alignParentTop="true"
+-    android:layout_centerHorizontal="true"
+-    xmlns:android="http://schemas.android.com/apk/res/android">
++<TabHost xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
++         android:layout_width="match_parent"
++         android:layout_height="match_parent"
++         android:id="@+id/tabHost1"
++         android:layout_alignParentTop="true"
++         android:layout_centerHorizontal="true"
++         xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+     <LinearLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:orientation="vertical">
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:orientation="vertical">
+ 
+         <TabWidget
+-            android:id="@android:id/tabs"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:background="#78ce6b"
+-            android:focusable="true"
+-            android:touchscreenBlocksFocus="true"
+-            android:layoutMode="opticalBounds"></TabWidget>
++                android:id="@android:id/tabs"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:background="#C2185B"
++                android:focusable="true"
++                android:touchscreenBlocksFocus="true"
++                android:layoutMode="opticalBounds"></TabWidget>
+ 
+         <FrameLayout
+-            android:id="@android:id/tabcontent"
+-            android:layout_width="match_parent"
+-            android:layout_height="match_parent">
++                android:id="@android:id/tabcontent"
++                android:layout_width="match_parent"
++                android:layout_height="match_parent">
+ 
+ 
+             <LinearLayout
+-                android:id="@+id/Lista"
+-                android:layout_width="match_parent"
+-                android:layout_height="match_parent"
+-                android:orientation="vertical"
+-                android:clickable="false"
+-                android:weightSum="1">
++                    android:id="@+id/LISTA"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:orientation="vertical"
++                    android:clickable="false"
++                    android:weightSum="1">
+ 
+                 <RelativeLayout
+-                    android:layout_width="match_parent"
+-                    android:layout_height="match_parent"
+-                    android:id="@+id/musica"
+-                    android:background="#fd9311">
+-
+-                    <ImageButton
+-                        android:layout_width="80px"
+-                        android:layout_height="80px"
+-                        android:id="@+id/player"
+-                        android:src="@android:drawable/ic_media_play"
+-                        android:layout_alignParentTop="true"
+-                        android:layout_toStartOf="@+id/imageBtSair" />
+-
+-                    <ImageButton
+-                        android:layout_width="80px"
+-                        android:layout_height="80px"
+-                        android:id="@+id/pausa"
+-                        android:src="@android:drawable/ic_media_pause"
+-                        android:layout_alignParentTop="true"
+-                        android:layout_toEndOf="@+id/imageBtSair" />
+-
+-                    <ImageButton
+-                        android:layout_width="80px"
+-                        android:layout_height="80px"
+-                        android:id="@+id/proximo"
+-                        android:src="@android:drawable/ic_media_next"
+-                        android:layout_alignParentTop="true"
+-                        android:layout_alignParentEnd="true" />
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:id="@+id/musica"
++                        android:background="#FBC02D">
+ 
+                     <ImageButton
+-                        android:layout_width="150px"
+-                        android:layout_height="100px"
+-                        android:id="@+id/imageBtSair"
+-                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+-                        android:layout_marginBottom="30dp"
+-                        android:layout_alignParentBottom="true"
+-                        android:layout_centerHorizontal="true" />
++                            android:layout_width="69dp"
++                            android:layout_height="62dp"
++                            android:id="@+id/imageBtSair"
++                            android:src="@android:drawable/ic_menu_close_clear_cancel"
++                            android:layout_marginBottom="25dp"
++                            android:layout_alignParentBottom="true"
++                            tools:src="@android:drawable/presence_offline"
++                            android:background="#EC407A" android:layout_alignParentEnd="true"
++                            android:layout_marginEnd="165dp" android:layout_alignParentRight="true"
++                            android:layout_marginRight="165dp"/>
+ 
+                     <TextView
+-                        android:layout_width="wrap_content"
+-                        android:layout_height="wrap_content"
+-                        android:textAppearance="?android:attr/textAppearanceSmall"
+-                        android:text="Nome da Música"
+-                        android:id="@+id/nomenatela"
+-                        android:textAlignment="center"
+-                        android:textColor="#161512"
+-                        android:textSize="16dp"
+-                        android:autoText="false"
+-                        android:allowUndo="false"
+-                        android:elegantTextHeight="false"
+-                        android:maxLength="350"
+-                        android:maxHeight="350dp"
+-                        android:gravity="center"
+-                        android:textStyle="bold"
+-                        android:layout_below="@+id/player"
+-                        android:layout_centerHorizontal="true"
+-                        android:layout_marginTop="133dp" />
+-
++                            android:layout_width="358dp"
++                            android:layout_height="174dp"
++                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
++                            android:text="Nome da Música"
++                            android:id="@+id/nomenatela"
++                            android:textAlignment="inherit"
++                            android:textColor="#161512"
++                            android:textSize="24sp"
++                            android:autoText="false"
++                            android:allowUndo="false"
++                            android:elegantTextHeight="true"
++                            android:maxLength="350"
++                            android:maxHeight="350dp"
++                            android:gravity="center"
++                            android:layout_below="@+id/player"
++                            android:layout_marginTop="72dp" android:background="#FF6E40" android:textAllCaps="true"
++                            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
++                            android:layout_marginRight="17dp" android:layout_marginEnd="17dp"/>
+                     <ProgressBar
+-                        style="?android:attr/progressBarStyleHorizontal"
+-                        android:layout_width="300dp"
+-                        android:layout_height="50dp"
+-                        android:id="@+id/progressBar"
+-                        android:layout_above="@+id/imageBtSair"
+-                        android:layout_centerHorizontal="true" />
+-
+-                    <ImageButton
+-                        android:layout_width="80px"
+-                        android:layout_height="80px"
+-                        android:id="@+id/anterior"
+-                        android:src="@android:drawable/ic_media_previous" />
++                            style="100"
++                            android:layout_width="304dp"
++                            android:layout_height="wrap_content"
++                            android:id="@+id/progressBar"
++                            android:layout_above="@+id/imageBtSair"
++                            android:background="#231B1B"
++                            android:progressTint="#FFFFFF" android:layout_alignParentStart="true"
++                            android:layout_marginBottom="19dp" android:layout_marginStart="51dp"
++                            android:layout_marginLeft="51dp" android:layout_alignParentLeft="true"/>
+ 
+                     <SeekBar
+-                        android:layout_width="wrap_content"
+-                        android:layout_height="wrap_content"
+-                        android:id="@+id/seekBar"
+-                        android:background="#1978d8"
+-                        android:layout_above="@+id/progressBar"
+-                        android:layout_alignStart="@+id/progressBar"
+-                        android:layout_marginBottom="27dp"
+-                        android:layout_alignEnd="@+id/progressBar" />
++                            android:layout_width="309dp"
++                            android:layout_height="wrap_content"
++                            android:id="@+id/seekBar"
++                            android:background="#1978d8"
++                            android:layout_above="@+id/progressBar"
++                            android:layout_alignStart="@+id/progressBar"
++                            android:layout_marginBottom="27dp"
++                            android:layout_alignEnd="@+id/progressBar" android:layout_alignLeft="@+id/progressBar"
++                            android:layout_alignRight="@+id/progressBar" android:layout_marginEnd="0dp"
++                            android:layout_marginRight="0dp" android:layout_marginLeft="-9dp"
++                            android:layout_marginStart="-9dp"/>
++                    <TextView
++                            android:text="duracao"
++                            android:layout_width="210dp"
++                            android:layout_height="wrap_content" android:layout_alignParentEnd="true"
++                            android:layout_marginEnd="96dp" android:layout_alignParentBottom="true"
++                            android:layout_marginBottom="278dp" android:id="@+id/duracao"
++                            android:textSize="18sp" android:textStyle="normal"
++                            android:textColor="#1549E4" android:textAlignment="center"
++                            android:gravity="center_horizontal" android:layout_alignParentRight="true"
++                            android:layout_marginRight="96dp"/>
++                    <ImageButton
++                            android:layout_width="47dp"
++                            android:layout_height="45dp" app:srcCompat="@android:drawable/ic_media_pause"
++                            android:layout_alignParentEnd="true" android:layout_alignParentTop="true"
++                            android:layout_marginEnd="110dp" android:layout_marginTop="17dp"
++                            android:id="@+id/pausa" android:background="#FF6E40" android:layout_marginRight="110dp"
++                            android:layout_alignParentRight="true"/>
++                    <ImageButton
++                            android:layout_width="46dp"
++                            android:layout_height="44dp" app:srcCompat="@android:drawable/ic_media_previous"
++                            android:layout_alignParentStart="true" android:layout_marginStart="17dp"
++                            android:layout_alignParentTop="true" android:layout_marginTop="17dp"
++                            android:id="@+id/anterior" android:background="#448AFF" android:layout_marginLeft="17dp"
++                            android:layout_alignParentLeft="true"/>
++                    <ImageButton
++                            android:layout_width="48dp"
++                            android:layout_height="45dp" app:srcCompat="@android:drawable/ic_media_play"
++                            android:layout_alignParentStart="true" android:layout_marginStart="109dp"
++                            android:layout_alignParentTop="true" android:layout_marginTop="17dp"
++                            android:id="@+id/player" android:background="#FF6E40"
++                            android:layout_alignParentLeft="true" android:layout_marginLeft="109dp"/>
++                    <ImageButton
++                            android:layout_width="42dp"
++                            android:layout_height="43dp" app:srcCompat="@android:drawable/ic_media_next"
++                            android:layout_alignParentEnd="true" android:layout_alignParentTop="true"
++                            android:layout_marginEnd="18dp" android:layout_marginTop="17dp"
++                            android:id="@+id/proximo" android:background="#448AFF" android:layout_marginRight="18dp"
++                            android:layout_alignParentRight="true"/>
++                    <TextView
++                            android:text="Contador"
++                            android:layout_width="196dp"
++                            android:layout_height="wrap_content" android:layout_alignParentRight="true"
++                            android:layout_alignParentEnd="true" android:layout_marginEnd="101dp"
++                            android:layout_alignParentBottom="true" android:layout_marginBottom="230dp"
++                            android:layout_marginRight="101dp" android:id="@+id/contador" android:textSize="18sp"
++                            android:autoText="false" android:gravity="center"/>
+ 
+ 
+                 </RelativeLayout>
+@@ -124,41 +149,64 @@
+             </LinearLayout>
+ 
+             <LinearLayout
+-                android:id="@+id/Play"
+-                android:layout_width="match_parent"
+-                android:layout_height="match_parent"
+-                android:orientation="vertical">
++                    android:id="@+id/PLAY"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:orientation="vertical">
+ 
+ 
++
+                 <RelativeLayout
+-                    android:id="@+id/lista"
+-                    android:layout_width="match_parent"
+-                    android:layout_height="wrap_content"
+-                    android:background="#9d41e8c9">
++                        android:id="@+id/lista"
++                        android:layout_width="match_parent"
++                        android:layout_height="wrap_content"
++                        android:background="#FF7043"
++
++                >
++
+ 
+                     <ListView
+-                        android:layout_width="wrap_content"
+-                        android:layout_height="match_parent"
+-                        android:id="@+id/listademusicas"
+-                        android:layout_gravity="right"
+-                        android:background="#53c3ef"
+-                        android:scrollingCache="false"
+-                        android:layout_alignParentEnd="true"
+-                        android:layout_alignParentStart="true" />
++                            android:layout_width="wrap_content"
++                            android:layout_height="match_parent"
++                            android:id="@+id/listademusicas"
++                            android:layout_gravity="right"
++                            android:background="#FF7043"
++                            android:scrollingCache="false"
++                            android:layout_alignParentEnd="true"
++                            android:layout_alignParentStart="true"
++                            android:padding="10dp"
++                            android:layout_marginLeft="10dp"
++                            android:contentDescription="teste"
++
++                            android:layout_alignParentRight="true" android:layout_alignParentLeft="true"
++                            android:animateLayoutChanges="true"
++                            style="@android:style/Widget.DeviceDefault.ExpandableListView"
++                            android:persistentDrawingCache="all|animation"
++
++
++                    />
+ 
+                     <TextView
+-                        android:layout_width="10px"
+-                        android:layout_height="11px"
+-                        android:id="@+id/nomedamusica"
+-                        android:textColor="#fffafa" />
++                            android:layout_width="10px"
++                            android:layout_height="11px"
++                            android:id="@+id/nomedamusica"
++                            android:textColor="#1F51A5"/>
++
++
+ 
+ 
+                 </RelativeLayout>
+ 
+ 
++
+             </LinearLayout>
+ 
++
++
+         </FrameLayout>
++        <ImageView android:layout_width="wrap_content"
++                   android:layout_height="wrap_content"
++                   android:src="@mipmap/itunes" android:id="@+id/image2" android:baselineAlignBottom="false"/>
+     </LinearLayout>
+ </TabHost>
+ 
+Index: app/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n\r\n    <!-- Base application theme. -->\r\n    <style name=\"AppTheme\" parent=\"Theme.AppCompat.Light.DarkActionBar\">\r\n        <!-- Customize your theme here. -->\r\n        <item name=\"colorPrimary\">@color/colorPrimary</item>\r\n        <item name=\"colorPrimaryDark\">@color/colorPrimaryDark</item>\r\n        <item name=\"colorAccent\">@color/colorAccent</item>\r\n    </style>\r\n\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/styles.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/res/values/styles.xml	(date 1596150164296)
+@@ -1,11 +1,12 @@
++
+ <resources>
+ 
+     <!-- Base application theme. -->
+     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+         <!-- Customize your theme here. -->
+-        <item name="colorPrimary">@color/colorPrimary</item>
+-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+-        <item name="colorAccent">@color/colorAccent</item>
++        <item name="android:colorPrimary">@color/colorPrimary</item>
++        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
++        <item name="android:colorAccent">@color/colorAccent</item>
+     </style>
+ 
+ </resources>
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectModuleManager\">\n    <modules>\n      <module fileurl=\"file://$PROJECT_DIR$/Mp3Fly.iml\" filepath=\"$PROJECT_DIR$/Mp3Fly.iml\" />\n      <module fileurl=\"file://$PROJECT_DIR$/app/app.iml\" filepath=\"$PROJECT_DIR$/app/app.iml\" />\n    </modules>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ .idea/modules.xml	(date 1596158528598)
+@@ -2,8 +2,9 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/Mp3Fly.iml" filepath="$PROJECT_DIR$/Mp3Fly.iml" />
+-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/Mp3Fly.iml" filepath="$PROJECT_DIR$/.idea/Mp3Fly.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Mp3Fly.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Mp3Fly.app.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mylibrary/Mp3Fly.mylibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/mylibrary/Mp3Fly.mylibrary.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <!-- Default screen margins, per the Android Design guidelines. -->\r\n    <dimen name=\"activity_horizontal_margin\">16dp</dimen>\r\n    <dimen name=\"activity_vertical_margin\">16dp</dimen>\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/dimens.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/res/values/dimens.xml	(date 1596150164332)
+@@ -1,5 +1,3 @@
+ <resources>
+     <!-- Default screen margins, per the Android Design guidelines. -->
+-    <dimen name="activity_horizontal_margin">16dp</dimen>
+-    <dimen name="activity_vertical_margin">16dp</dimen>
+ </resources>
+Index: app/src/main/res/values-w820dp/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <!-- Example customization of dimensions originally defined in res/values/dimens.xml\r\n         (such as screen margins) for screens with more than 820dp of available width. This\r\n         would include 7\" and 10\" devices in landscape (~960dp and ~1280dp respectively). -->\r\n    <dimen name=\"activity_horizontal_margin\">64dp</dimen>\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values-w820dp/dimens.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/src/main/res/values-w820dp/dimens.xml	(date 1596150164404)
+@@ -2,5 +2,4 @@
+     <!-- Example customization of dimensions originally defined in res/values/dimens.xml
+          (such as screen margins) for screens with more than 820dp of available width. This
+          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+-    <dimen name="activity_horizontal_margin">64dp</dimen>
+ </resources>
+Index: app/src/main/java/com/seixas/mp3fly/Tocamedia.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/seixas/mp3fly/Tocamedia.kt	(date 1596150164468)
++++ app/src/main/java/com/seixas/mp3fly/Tocamedia.kt	(date 1596150164468)
+@@ -0,0 +1,195 @@
++package com.seixas.mp3fly
++
++import android.content.Context
++import android.media.Image
++import android.media.MediaPlayer
++import android.os.Environment
++import android.os.storage.StorageManager
++import android.widget.ImageView
++import java.io.File
++import java.io.FileFilter
++import java.io.FilenameFilter
++import java.io.IOException
++import java.util.*
++import kotlin.collections.ArrayList
++
++
++/**
++ * Created by nelson on 04/04/2016.
++ */
++open class Tocamedia : MediaPlayer() {
++    private val context: Context? = null
++    private val cartao = Environment.getExternalStorageDirectory()
++    private val listademusicas: List<String>? = null
++    private val minhaLista: List<String>? = null
++    private val fileFilter: FileFilter? = null
++    private val novoFilter: FileFilter? = null
++    private val nomedir: FileFilter? = null
++    private var camimho: String? = null
++    private var duracao: Int? = null
++    private var soamusica: List<String>? = null
++    private var musicas: List<String>? = null
++    private val diretorio: List<String>? = null
++    private val arqs: Array<String>? = null
++    private val storageManager: StorageManager? = null
++    private val environment: Environment? = null
++    private val nomediretorio: Array<String>? = null
++
++    var imagem: List<Image>? = null
++    var dirraiz:String?=""
++    var foto = R.id.image2
++    //  val novocaminho=""
++    fun tocar() {
++        if (isPlaying) {
++            stop() //Para a musica antes
++        }
++        start()
++    }
++
++    fun pausa() {
++        pause()
++    }
++
++    fun proxima(triha: Int?) {
++        //  selectTrack(triha);
++    }
++
++    fun parar() {
++
++        stop()
++    }
++
++    fun tempodamusica(): Int {
++        duracao = if (isPlaying) {
++            duration
++        } else {
++            0
++        }
++        return duracao as Int
++    }
++
++    fun posicao(): Int {
++        return currentPosition
++    }
++
++    fun abrir(musica: Int?) {
++        try {
++            if (isPlaying) {
++                stop() //Para a musica antes se estiver tocando
++            }
++            // musicas.contains(musica);
++            reset()
++            val teste =dirraiz+'/'+ soamusica!![musica!!]
++            setDataSource(teste)
++            prepare()
++        } catch (e: IOException) {
++            e.printStackTrace()
++        }
++    }
++
++    /*
++     Verifica se esta tocando
++      */
++    fun naotocando(): Boolean {
++        return isPlaying
++    }
++
++    //Lista os arquvios
++    @Throws(IOException::class)
++    fun listarq(): List<String?> {
++
++        soamusica = ArrayList()
++        musicas = ArrayList()
++        imagem = ArrayList()
++
++        val directotio = Environment.getExternalStorageDirectory()
++        val internaldisk0 = File("/storage")
++        val internaldisk1 = File(Environment.DIRECTORY_MUSIC+"/").absolutePath
++
++        //Procura sempre nas pasta de musicas
++        val cartao1 =  File("/storage/").listFiles()
++        val diretorio = File(directotio.absolutePath).listFiles()
++
++        for (file in cartao1) {
++            if (file === cartao1[0])
++            {
++                val musica = File(file.absolutePath + "/MUSICAS/").listFiles()
++                val musicaintera =  File(file.absolutePath + "/Music/").listFiles()
++
++                if (musica != null) {
++                for (file1 in musica) {
++
++                  (musicas as ArrayList<String?>).add(file1.absolutePath)
++                  (soamusica as ArrayList<String?>).add(file1.name)
++                }
++                }
++
++                if (musicaintera != null) {
++                    //Pega o caminho Asol
++                    this.dirraiz =file.absolutePath+'/'+Environment.DIRECTORY_MUSIC
++                    for (file1Externo in musicaintera) {
++
++                        (musicas as ArrayList<String?>).add(file1Externo.absolutePath)
++                        (soamusica as ArrayList<String?>).add(file1Externo.name)
++                    }
++
++
++                }
++
++            } else if (file === cartao1[1]) {
++                val sd1 = File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath).listFiles()
++                if (sd1 != null) {
++                    for (file2 in sd1) {
++
++                        (musicas as ArrayList<String?>).add(file2.absolutePath)
++                        (soamusica as ArrayList<String?>).add(file2.name)
++                    }
++                }
++            } else if (file === cartao1[2]) {
++                val sd2 = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath).listFiles()
++                if (sd2 != null) {
++                    for (file3 in sd2) { //if (file1.getAbsolutePath().equals("/MUSICA/"))
++                        (musicas as ArrayList<String?>).add(file3.absolutePath)
++                        (soamusica as ArrayList<String?>).add(file3.name)
++                    }
++                }
++            }
++
++        }
++
++
++        /*
++        * Pega as pastas do crtao interno e externo
++         */
++       // val storage = internaldisk1
++        //final File storage= new File(Audio.Media.IS_MUSIC);
++
++
++        //Se for um diretorio d emusica adciona na lista
++        /**
++         * Faz o filtro
++         */
++        val fileNameFilter = FilenameFilter { dir, name ->
++            if (name.lastIndexOf('.') > 0) {
++                // get last index for '.' char
++                val lastIndex = name.lastIndexOf('.')
++
++                // get extension
++                val str = name.substring(lastIndex)
++
++                // match path name extension
++                if (str == ".mp3") {
++                    return@FilenameFilter true
++                }
++            }
++            false
++        }
++
++
++
++        //val indice=Collections.indexOfSubList(musicas, soamusica)
++         Collections.sort( soamusica)
++        return   soamusica as  ArrayList<String?>
++    }
++
++}
+\ No newline at end of file
+Index: app/src/main/java/com/seixas/mp3fly/Tocador.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/seixas/mp3fly/Tocador.kt	(date 1596150164456)
++++ app/src/main/java/com/seixas/mp3fly/Tocador.kt	(date 1596150164456)
+@@ -0,0 +1,371 @@
++/**
++ * Projeto de MP3
++ * Autor: Nelson Seixas
++ */
++package com.seixas.mp3fly
++
++
++import android.Manifest
++import android.content.pm.PackageManager
++import android.graphics.Color
++import android.os.Bundle
++import android.os.Handler
++import android.view.View
++import android.widget.*
++import android.widget.AdapterView.OnItemClickListener
++import android.widget.AdapterView.OnItemLongClickListener
++import android.widget.SeekBar.OnSeekBarChangeListener
++import android.widget.TabHost.TabSpec
++import androidx.appcompat.app.AppCompatActivity
++import androidx.core.app.ActivityCompat
++import androidx.core.content.ContextCompat
++import java.io.IOException
++import kotlin.system.exitProcess
++
++class Tocador : AppCompatActivity() {
++    private var imageBtproximo: ImageButton? = null
++    private var imageButton2: ImageButton? = null
++    private var imageButton3: ImageButton? = null
++    private var imageBtSair: ImageButton? = null
++    private var imageBtAnterior: ImageButton? = null
++    private var posicaonalista: Int? = null
++    private val btsdcad: Button? = null
++    private val btsdExterno: Button? = null
++    private var tabHost: TabHost? = null
++    private val botaoabrir1: Button? = null
++    private var tabSpec: TabSpec? = null
++    private var listaarq: ListView? = null
++    private val view: View? = null
++    private var textView: TextView? = null
++    private var nomenatela: TextView? = null
++    private var duracao: TextView? = null
++    private var musicas: List<String?>? = null
++    private val caminhocompleto: String? = null
++    private var nomedamusica: TextView? = null
++    private var tocamedia: Tocamedia? = null
++    private var progressBar: ProgressBar? = null
++    private val mHandler = Handler()
++    private var faz: Boolean? = null
++    private var sairfora: Boolean? = null
++    private var barra: SeekBar? = null
++    private var relogio: TextView? = null
++    private var imglista: ImageView? = null
++    private var teste: ArrayList<View>? = null
++
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++
++        tocamedia = Tocamedia()
++
++        setContentView(R.layout.activity_tocador)
++
++
++
++        tabHost = findViewById<View>(R.id.tabHost1) as TabHost
++        tabHost!!.setup()
++        tabHost!!.currentTab = 0
++        tabSpec = tabHost!!.newTabSpec("Aba1")
++        tabSpec!!.setContent(R.id.lista)
++        tabSpec!!.setIndicator("Musicas")
++        tabHost!!.addTab(tabSpec)
++        tabSpec = tabHost!!.newTabSpec("Aba2")
++        tabSpec!!.setContent(R.id.musica)
++        tabSpec!!.setIndicator("Play")
++        tabHost!!.addTab(tabSpec)
++        imageBtSair = findViewById<View>(R.id.imageBtSair) as ImageButton
++        listaarq = findViewById<View>(R.id.listademusicas) as ListView
++        textView = findViewById<View>(R.id.nomedamusica) as TextView
++        imageButton2 = findViewById<View>(R.id.player) as ImageButton
++        imageButton3 = findViewById<View>(R.id.pausa) as ImageButton
++        imageBtproximo = findViewById<View>(R.id.proximo) as ImageButton
++        imageBtAnterior = findViewById<View>(R.id.anterior) as ImageButton
++        nomenatela = findViewById<View>(R.id.nomenatela) as TextView
++        progressBar = findViewById<View>(R.id.progressBar) as ProgressBar
++        duracao = findViewById<View>(R.id.duracao) as TextView
++        nomedamusica = findViewById<View>(R.id.nomedamusica) as TextView
++        barra = findViewById<View>(R.id.seekBar) as SeekBar
++        relogio = findViewById<View>(R.id.contador) as TextView
++        imglista = findViewById<View>(R.id.image2) as ImageView
++        barra!!.visibility = SeekBar.INVISIBLE
++        progressBar!!.visibility = ProgressBar.INVISIBLE
++        nomenatela!!.visibility = TextView.INVISIBLE
++        posicaonalista = 0
++        faz = false
++        sairfora = false
++
++
++
++
++        if (minhainstancia != null) {
++            println("JA esta criado")
++
++        } else {
++            onDestroy()
++        }
++
++        /**
++         * Da permissão ao aplicação para escrever no cartao sd interno ou externo
++         */
++        val permissionCheck1 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
++        val permissionCheck2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
++        // int permissionCheck3= ContextCompat.checkSelfPermission(this, Manifest.permission.R);
++        //ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
++
++        if (permissionCheck1 != PackageManager.PERMISSION_GRANTED || permissionCheck2 != PackageManager.PERMISSION_GRANTED) {
++            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
++                    Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_WRITE_STORAGE)
++        }
++
++
++        try {
++
++            caminho()
++        } catch (e: IOException) {
++            e.printStackTrace()
++        }
++
++        //Toca musica
++        imageButton2!!.setOnClickListener {
++            faz = true
++
++            tocamedia!!.tocar()
++
++            MostraBarraTitulo()
++        }
++        /*
++        Botão de pausa da música
++         */imageButton3!!.setOnClickListener {
++            faz = false
++            Toast.makeText(this, "Pausa na música", Toast.LENGTH_SHORT).show()
++            tocamedia!!.pausa()
++            // progressBar.setVisibility(ProgressBar.INVISIBLE);
++        }
++
++        /*
++        Botão anterior
++         */imageBtAnterior!!.setOnClickListener {
++            if (faz == true) {
++                Toast.makeText(this, "Música anterior", Toast.LENGTH_SHORT).show()
++                anterior()
++            }
++        }
++
++        /*
++         Proxima musica
++          */imageBtproximo!!.setOnClickListener {
++            if (faz == true) {
++                Toast.makeText(this, "Próxima música", Toast.LENGTH_SHORT).show()
++                proxima()
++            }
++        }
++
++        /*
++        Sai do sistema
++         */imageBtSair!!.setOnClickListener {
++            Toast.makeText(this@Tocador, "Saindo do Tocador", Toast.LENGTH_SHORT).show()
++            tocamedia!!.parar()
++            sairfora = true
++            faz = false
++            Thread.sleep(200)
++            Thread.currentThread().interrupt()
++            finish()
++            tocamedia = null
++            closeContextMenu()
++            exitProcess(0)
++
++
++        }
++
++        /*
++       Seleciona a musica da lista
++
++        */listaarq!!.onItemClickListener = OnItemClickListener { parent, view, position, id ->
++            faz = true
++            tabHost!!.currentTab = 1
++            nomedamusica!!.setTextColor(Color.BLUE)
++            posicaonalista = position
++            tocamedia!!.abrir(posicaonalista)
++            nomenatela!!.text = parent.getItemAtPosition(position).toString()
++            duracao!!.text = "Duração :" + CoverteHora(tocamedia!!.duration)
++            MostraBarraTitulo()
++            tocamedia!!.tocar()
++        }
++        listaarq!!.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id ->
++            tocamedia!!.abrir(position)
++            nomedamusica!!.setTextColor(Color.BLUE)
++            nomenatela!!.text = parent.getItemAtPosition(position).toString()
++            duracao!!.text = "Duração :" + CoverteHora(tocamedia!!.duration)
++            MostraBarraTitulo()
++            tocamedia!!.tocar()
++            false
++        }
++
++        //Posiciona a musica pelo SeekTo na trilha
++        barra!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
++            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
++            override fun onStartTrackingTouch(seekBar: SeekBar) {}
++            override fun onStopTrackingTouch(seekBar: SeekBar) {
++                tocamedia!!.seekTo(seekBar.progress)
++            }
++        })
++    }
++
++    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
++        super.onRestoreInstanceState(savedInstanceState)
++        onRestoreInstanceState(savedInstanceState)
++    }
++
++    /**
++     * Alimenta a lista de musicas
++     */
++    @Throws(IOException::class)
++    fun caminho() {
++        musicas = tocamedia?.listarq()
++
++        // Collections.sort(musicas);
++        //val teste1 = ArrayAdapter(this,  android.R.layout.simple_list_item_1,  musicas!!)
++        val teste1 = ArrayAdapter(this, android.R.layout.simple_list_item_1, musicas!!)
++        listaarq!!.adapter = teste1
++        listaarq!!.itemsCanFocus = true
++
++    }
++
++    /**
++     * Metodo da proxima musica
++     */
++    fun proxima() {
++        // Collections.sort(musicas);
++        if (sairfora == false) {
++            try {
++                if (posicaonalista == listaarq!!.count) {
++                    Toast.makeText(this@Tocador, "Final da lista de músicas voltando ao inicio da lista .", Toast.LENGTH_SHORT).show()
++                    posicaonalista = 1 //Seta a posição na lista
++                    anterior()
++                } else {
++                    posicaonalista = posicaonalista!! + 1
++                    val musica = listaarq!!.getItemAtPosition(posicaonalista!!).toString()
++                    tocamedia!!.abrir(posicaonalista)
++                    nomenatela!!.text = musica
++                    duracao!!.text = "Duração :" + CoverteHora(tocamedia!!.duration)
++                    if (tocamedia!!.naotocando()) {
++                        tocamedia!!.stop()
++                    }
++                    nomedamusica!!.setTextColor(Color.parseColor("blue"))
++                    MostraBarraTitulo()
++                    tocamedia!!.tocar()
++                }
++            } catch (e: Exception) {
++                Toast.makeText(this@Tocador, "Final da lista de músicas voltando ao inicio da lista.", Toast.LENGTH_SHORT).show()
++                posicaonalista = 1 //Seta a posição na lista
++                anterior()
++            }
++        }
++    }
++
++    /**
++     * Método da musica posterior
++     */
++    fun anterior() {
++        // Collections.sort(musicas);
++        try {
++            if (posicaonalista == 0) {
++                Toast.makeText(this@Tocador, "Inicio da lista de musica", Toast.LENGTH_SHORT).show()
++            } else {
++                posicaonalista = posicaonalista!! - 1
++                val musica = listaarq!!.getItemAtPosition(posicaonalista!!).toString()
++                tocamedia!!.abrir(posicaonalista)
++                nomenatela!!.text = musica
++                duracao!!.text = "Duraçao :" + CoverteHora(tocamedia!!.duration)
++                MostraBarraTitulo()
++                tocamedia!!.tocar()
++            }
++        } catch (e: Exception) {
++            Toast.makeText(this@Tocador, "Inicio da lista de musica", Toast.LENGTH_SHORT).show()
++        }
++    }
++
++    /*
++    Thead que atualiza a barra da musica
++     */
++    fun atualizabarra() {
++        Thread(object : Runnable {
++            override fun run() {
++                val teste = tocamedia!!.duration
++                // progressBar.setMax(teste);
++                barra!!.max = teste
++                run {
++                    for (a in 1 until teste) {
++                        val finalA = a
++                        mHandler.post {
++                            if (!tocamedia!!.naotocando() && sairfora == false && faz == true) {
++                                Thread.currentThread().interrupt()
++                                proxima()
++                            } else {
++                                //progressBar.setProgress(tocamedia.getCurrentPosition());
++                                barra!!.progress = tocamedia!!.currentPosition
++                                relogio!!.text = "Contagem :" + CoverteHora((tocamedia!!.currentPosition - tocamedia!!.duration) * (-1))
++                                // Log.v("Teste", "Posicao" + finalA +" Posicao na lista "+posicaonalista);
++                                nomedamusica!!.setTextColor(Color.parseColor("blue"))
++                            }
++                        }
++                        try {
++                            if (sairfora == true) {
++                                tocamedia!!.reset()
++                                Thread.currentThread().interrupt()
++
++                            }
++
++                            if (!Thread.currentThread().isInterrupted) {
++                                Thread.sleep(200)
++                            }
++
++                        } catch (e: InterruptedException) {
++                            e.printStackTrace()
++                        }
++                    }
++
++                }
++            }
++        }).start()
++    }
++
++    /**
++     * Atualiza a barra e o titulo da musica
++     */
++    fun MostraBarraTitulo() {
++        // progressBar.setVisibility(ProgressBar.VISIBLE);
++        nomenatela!!.visibility = TextView.VISIBLE
++        barra!!.visibility = Spinner.VISIBLE
++        atualizabarra()
++        nomedamusica!!.setTextColor(Color.parseColor("blue"))
++    }
++
++
++    /**
++     * Coverte msg em horas
++     * @param recebe
++     * @return
++     */
++    fun CoverteHora(recebe: Int): String {
++        val segundos = (recebe / 1000 % 60)
++        val minutos = (recebe / 60000 % 60)
++        val horas = (recebe / 3600000 % 24)
++        return String.format("%02d:%02d:%02d", horas, minutos, segundos)
++    }
++
++    companion object {
++        private const val REQUEST_WRITE_STORAGE = 112
++        private var INSTANCIA: Tocador? = null
++        val minhainstancia: Tocador
++            get() {
++                if (INSTANCIA == null) {
++                    INSTANCIA = Tocador()
++
++                }
++                return INSTANCIA!!
++            }
++
++
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/seixas/mp3fly/Teste.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/seixas/mp3fly/Teste.kt	(date 1596150164512)
++++ app/src/main/java/com/seixas/mp3fly/Teste.kt	(date 1596150164512)
+@@ -0,0 +1,3 @@
++package com.seixas.mp3fly
++
++class Teste
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(date 1596150167884)
++++ .idea/jarRepositories.xml	(date 1596150167884)
+@@ -0,0 +1,30 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenRepo" />
++      <option name="name" value="MavenRepo" />
++      <option name="url" value="https://repo.maven.apache.org/maven2/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="BintrayJCenter" />
++      <option name="name" value="BintrayJCenter" />
++      <option name="url" value="https://jcenter.bintray.com/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="Google" />
++      <option name="name" value="Google" />
++      <option name="url" value="https://dl.google.com/dl/android/maven2/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Sat Apr 28 10:18:45 BRT 2018\ndistributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-4.4-all.zip\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ gradle/wrapper/gradle-wrapper.properties	(date 1596157988488)
+@@ -1,6 +1,6 @@
+-#Sat Apr 28 10:18:45 BRT 2018
++#Thu Jul 30 21:32:53 BRT 2020
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-4.4-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-bin.zip
+Index: mylibrary/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mylibrary/build.gradle	(date 1596150074028)
++++ mylibrary/build.gradle	(date 1596150074028)
+@@ -0,0 +1,35 @@
++apply plugin: 'com.android.library'
++apply plugin: 'kotlin-android'
++apply plugin: 'kotlin-android-extensions'
++
++android {
++    compileSdkVersion 29
++    buildToolsVersion "29.0.3"
++
++    defaultConfig {
++        minSdkVersion 23
++        targetSdkVersion 29
++        versionCode 1
++        versionName "1.0"
++
++        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
++        consumerProguardFiles 'consumer-rules.pro'
++    }
++
++    buildTypes {
++        release {
++            minifyEnabled false
++            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
++        }
++    }
++
++}
++
++dependencies {
++    implementation fileTree(dir: 'libs', include: ['*.jar'])
++    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
++
++    testImplementation 'junit:junit:4.12'
++    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
++    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
++}
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(date 1596158475866)
++++ .idea/compiler.xml	(date 1596158475866)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="14" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"GradleSettings\">\n    <option name=\"linkedExternalProjectsSettings\">\n      <GradleProjectSettings>\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"modules\">\n          <set>\n            <option value=\"$PROJECT_DIR$\" />\n            <option value=\"$PROJECT_DIR$/app\" />\n          </set>\n        </option>\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\n      </GradleProjectSettings>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ .idea/gradle.xml	(date 1596158476098)
+@@ -1,14 +1,19 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
++        <option name="delegatedBuild" value="true" />
++        <option name="testRunner" value="PLATFORM" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="gradleJvm" value="openjdk-14" />
+         <option name="modules">
+           <set>
+             <option value="$PROJECT_DIR$" />
+             <option value="$PROJECT_DIR$/app" />
++            <option value="$PROJECT_DIR$/mylibrary" />
+           </set>
+         </option>
+         <option name="resolveModulePerSourceSet" value="false" />
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"Kotlin2JsCompilerArguments\">\n    <option name=\"sourceMapEmbedSources\" />\n    <option name=\"sourceMapPrefix\" />\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\n  </component>\n  <component name=\"ProjectType\">\n    <option name=\"id\" value=\"Android\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ .idea/misc.xml	(date 1598495859465)
+@@ -1,13 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="Kotlin2JsCompilerArguments">
+-    <option name="sourceMapEmbedSources" />
+-    <option name="sourceMapPrefix" />
+-  </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+-    <output url="file://$PROJECT_DIR$/build/classes" />
+-  </component>
+-  <component name="ProjectType">
+-    <option name="id" value="Android" />
+-  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_14" default="false" project-jdk-name="openjdk-14" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file
+Index: app/release/output.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[{\"outputType\":{\"type\":\"APK\"},\"apkInfo\":{\"type\":\"MAIN\",\"splits\":[],\"versionCode\":11},\"path\":\"app-release.apk\",\"properties\":{\"packageId\":\"com.nelson.mp3fly\",\"split\":\"\",\"minSdkVersion\":\"16\"}}]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/release/output.json	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ app/release/output.json	(date 1596150163684)
+@@ -1,1 +1,1 @@
+-[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":11},"path":"app-release.apk","properties":{"packageId":"com.nelson.mp3fly","split":"","minSdkVersion":"16"}}]
+\ No newline at end of file
++[{"outputType":{"type":"APK"},"apkData":{"type":"MAIN","splits":[],"versionCode":8,"versionName":"1.8","enabled":true,"outputFile":"app-release.apk","fullName":"release","baseName":"release","dirName":""},"path":"app-release.apk","properties":{}}]
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"VcsDirectoryMappings\">\n    <mapping directory=\"$PROJECT_DIR$\" vcs=\"Git\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ .idea/vcs.xml	(date 1596150167904)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++    <mapping directory="" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/codeStyles/Project.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"ProjectCodeStyleConfiguration\">\n  <code_scheme name=\"Project\" version=\"173\">\n    <Objective-C-extensions>\n      <file>\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Import\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Macro\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Typedef\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Enum\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Constant\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Global\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Struct\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"FunctionPredecl\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Function\" />\n      </file>\n      <class>\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Property\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"Synthesize\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"InitMethod\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"StaticMethod\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"InstanceMethod\" />\n        <option name=\"com.jetbrains.cidr.lang.util.OCDeclarationKind\" value=\"DeallocMethod\" />\n      </class>\n      <extensions>\n        <pair source=\"cpp\" header=\"h\" fileNamingConvention=\"NONE\" />\n        <pair source=\"c\" header=\"h\" fileNamingConvention=\"NONE\" />\n      </extensions>\n    </Objective-C-extensions>\n  </code_scheme>\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/codeStyles/Project.xml	(revision a01346dcbf04f33c5ac5d5c3164eec96c63f0522)
++++ .idea/codeStyles/Project.xml	(date 1596150168600)
+@@ -1,29 +1,116 @@
+ <component name="ProjectCodeStyleConfiguration">
+   <code_scheme name="Project" version="173">
+-    <Objective-C-extensions>
+-      <file>
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Import" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Macro" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Typedef" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Enum" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Constant" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Global" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Struct" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="FunctionPredecl" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Function" />
+-      </file>
+-      <class>
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Property" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Synthesize" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="InitMethod" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="StaticMethod" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="InstanceMethod" />
+-        <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="DeallocMethod" />
+-      </class>
+-      <extensions>
+-        <pair source="cpp" header="h" fileNamingConvention="NONE" />
+-        <pair source="c" header="h" fileNamingConvention="NONE" />
+-      </extensions>
+-    </Objective-C-extensions>
++    <codeStyleSettings language="XML">
++      <indentOptions>
++        <option name="CONTINUATION_INDENT_SIZE" value="4" />
++      </indentOptions>
++      <arrangement>
++        <rules>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>xmlns:android</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>^$</XML_NAMESPACE>
++                </AND>
++              </match>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>xmlns:.*</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>^$</XML_NAMESPACE>
++                </AND>
++              </match>
++              <order>BY_NAME</order>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>.*:id</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
++                </AND>
++              </match>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>.*:name</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
++                </AND>
++              </match>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>name</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>^$</XML_NAMESPACE>
++                </AND>
++              </match>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>style</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>^$</XML_NAMESPACE>
++                </AND>
++              </match>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>.*</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>^$</XML_NAMESPACE>
++                </AND>
++              </match>
++              <order>BY_NAME</order>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>.*</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
++                </AND>
++              </match>
++              <order>ANDROID_ATTRIBUTE_ORDER</order>
++            </rule>
++          </section>
++          <section>
++            <rule>
++              <match>
++                <AND>
++                  <NAME>.*</NAME>
++                  <XML_ATTRIBUTE />
++                  <XML_NAMESPACE>.*</XML_NAMESPACE>
++                </AND>
++              </match>
++              <order>BY_NAME</order>
++            </rule>
++          </section>
++        </rules>
++      </arrangement>
++    </codeStyleSettings>
+   </code_scheme>
+ </component>
+\ No newline at end of file
+Index: mylibrary/proguard-rules.pro
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mylibrary/proguard-rules.pro	(date 1596150074308)
++++ mylibrary/proguard-rules.pro	(date 1596150074308)
+@@ -0,0 +1,21 @@
++# Add project specific ProGuard rules here.
++# You can control the set of applied configuration files using the
++# proguardFiles setting in build.gradle.
++#
++# For more details, see
++#   http://developer.android.com/guide/developing/tools/proguard.html
++
++# If your project uses WebView with JS, uncomment the following
++# and specify the fully qualified class name to the JavaScript interface
++# class:
++#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
++#   public *;
++#}
++
++# Uncomment this to preserve the line number information for
++# debugging stack traces.
++#-keepattributes SourceFile,LineNumberTable
++
++# If you keep the line number information, uncomment this to
++# hide the original source file name.
++#-renamesourcefileattribute SourceFile
+diff --git mylibrary/consumer-rules.pro mylibrary/consumer-rules.pro
+new file mode 100644
+diff --git app/gradlew.bat app/gradlew.bat

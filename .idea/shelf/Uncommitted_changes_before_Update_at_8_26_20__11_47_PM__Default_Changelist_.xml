@@ -1,0 +1,59 @@
+<changelist name="Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]" date="1598496485940" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 8/26/20, 11:47 PM [Default Changelist]" />
+  <binary>
+    <option name="BEFORE_PATH" value="app/app-release.apk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".idea/caches/build_file_checksums.ser" />
+    <option name="AFTER_PATH" value=".idea/caches/build_file_checksums.ser" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]/build_file_checksums.ser" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/mipmap-hdpi/ic_launcher.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/mipmap-xhdpi/ic_launcher.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/release/app-release.apk" />
+    <option name="AFTER_PATH" value="app/release/app-release.apk" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]/app-release.apk" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/gradle/wrapper/gradle-wrapper.jar" />
+    <option name="AFTER_PATH" value="app/gradle/wrapper/gradle-wrapper.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]/gradle-wrapper.jar" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/mipmap-mdpi/ic_launcher.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/mipmap-hdpi/mp3l2.png" />
+    <option name="AFTER_PATH" value="app/src/main/res/mipmap-hdpi/mp3l2.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]/mp3l2.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/mipmap-hdpi/itunes.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_26_20,_11_47_PM_[Default_Changelist]/itunes.png" />
+  </binary>
+</changelist>
